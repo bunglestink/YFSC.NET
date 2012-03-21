@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4E84C1FD-F93C-4981-A622-E7E4126BBD9A}</ProjectGuid>
+    <ProjectTypeGuids>{349C5851-65DF-11DA-9384-00065B846F21};{603C0E0B-DB56-11DC-BE95-000D561079B0};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <RootNamespace>YaleFigureSkatingClub</RootNamespace>
+    <AssemblyName>YaleFigureSkatingClub</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion.Data.Linq">
+      <HintPath>lib\Remotion.Data.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>lib\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate.ByteCode.Castle">
+      <HintPath>lib\NHibernate.ByteCode.Castle.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>lib\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentNHibernate">
+      <HintPath>lib\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>lib\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <HintPath>lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql">
+      <HintPath>lib\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.ApplicationServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\" />
+    <Folder Include="Models\" />
+    <Folder Include="Scripts\" />
+    <Folder Include="lib\" />
+    <Folder Include="Controllers\ServiceControllers\" />
+    <Folder Include="Views\Membership\" />
+    <Folder Include="Content\files\" />
+    <Folder Include="Content\files\bylaws\" />
+    <Folder Include="Content\files\attach\" />
+    <Folder Include="Views\Errors\" />
+    <Folder Include="Views\Announcement\" />
+    <Folder Include="Controllers\AdminControllers\" />
+    <Folder Include="Controllers\InfrastructureControllers\" />
+    <Folder Include="Infrastructure\" />
+    <Folder Include="Views\Account\" />
+    <Folder Include="Controllers\MemberControllers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\ServiceControllers\AnnualRegistrationServiceController.cs" />
+    <Compile Include="Controllers\ServiceControllers\SkatingSessionServiceController.cs" />
+    <Compile Include="Controllers\SkatingSessionController.cs" />
+    <Compile Include="Controllers\AdminControllers\AnnouncementController.cs" />
+    <Compile Include="Controllers\AdminControllers\CoachController.cs" />
+    <Compile Include="Controllers\AdminControllers\RegistrationTermController.cs" />
+    <Compile Include="Controllers\AdminControllers\CalendarItemController.cs" />
+    <Compile Include="Infrastructure\YaleMembershipProvider.cs" />
+    <Compile Include="Infrastructure\YaleRoleProvider.cs" />
+    <Compile Include="Controllers\InfrastructureControllers\AccountController.cs" />
+    <Compile Include="Controllers\MemberControllers\MembershipController.cs" />
+    <Compile Include="Controllers\InfrastructureControllers\ErrorsController.cs" />
+    <Compile Include="Infrastructure\NHSessionManager.cs" />
+    <Compile Include="Models\ViewCalendarItem.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\Home\Index.aspx" />
+    <Content Include="Web.config" />
+    <Content Include="Global.asax" />
+    <Content Include="Views\Layout.master" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\ui-lightness\jquery-ui-1.8.16.custom.css" />
+    <Content Include="Content\ui-lightness\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
+    <Content Include="Content\ui-lightness\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
+    <Content Include="Content\ui-lightness\images\ui-bg_flat_10_000000_40x100.png" />
+    <Content Include="Content\ui-lightness\images\ui-bg_glass_100_f6f6f6_1x400.png" />
+    <Content Include="Content\ui-lightness\images\ui-bg_glass_100_fdf5ce_1x400.png" />
+    <Content Include="Content\ui-lightness\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\ui-lightness\images\ui-bg_gloss-wave_35_f6a828_500x100.png" />
+    <Content Include="Content\ui-lightness\images\ui-bg_highlight-soft_100_eeeeee_1x100.png" />
+    <Content Include="Content\ui-lightness\images\ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+    <Content Include="Content\ui-lightness\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\ui-lightness\images\ui-icons_228ef1_256x240.png" />
+    <Content Include="Content\ui-lightness\images\ui-icons_ef8c08_256x240.png" />
+    <Content Include="Content\ui-lightness\images\ui-icons_ffd27a_256x240.png" />
+    <Content Include="Content\ui-lightness\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.4.4.js" />
+    <Content Include="Scripts\jquery-1.4.4.min.js" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery.tmpl.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\knockout-1.2.1.js" />
+    <Content Include="Scripts\knockout.mapping.js" />
+    <Content Include="Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Views\Home\ByLaws.aspx" />
+    <Content Include="Views\Home\ContactInformation.aspx" />
+    <Content Include="Views\Home\Calendar.aspx" />
+    <Content Include="Views\Home\Program.aspx" />
+    <Content Include="Views\Home\Membership.aspx" />
+    <Content Include="Views\Home\Brochure.aspx" />
+    <Content Include="Views\Errors\Index.aspx" />
+    <Content Include="Views\Announcement\Index.aspx" />
+    <Content Include="Views\Announcement\Edit.aspx" />
+    <Content Include="Views\Announcement\DeleteConfirm.aspx" />
+    <Content Include="Views\Coach\Index.aspx" />
+    <Content Include="Views\Coach\Edit.aspx" />
+    <Content Include="Views\Coach\DeleteConfirm.aspx" />
+    <Content Include="Views\RegistrationTerm\Index.aspx" />
+    <Content Include="Views\RegistrationTerm\Edit.aspx" />
+    <Content Include="Views\RegistrationTerm\DeleteConfirm.aspx" />
+    <Content Include="Views\RegistrationTerm\DeleteError.aspx" />
+    <Content Include="Views\CalendarItem\Index.aspx" />
+    <Content Include="Views\CalendarItem\Edit.aspx" />
+    <Content Include="Views\CalendarItem\DeleteConfirm.aspx" />
+    <Content Include="Views\Home\Coaches.aspx" />
+    <Content Include="Views\Home\Coach.aspx" />
+    <Content Include="Views\Account\LogOn.aspx" />
+    <Content Include="Views\Account\CreateConfirm.aspx" />
+    <Content Include="Views\Account\Create.aspx" />
+    <Content Include="Views\Membership\Index.aspx" />
+    <Content Include="Views\Membership\Register.aspx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\WebApplications\Microsoft.WebApplication.targets" />
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties VerifyCodeBehindFields="true" VerifyCodeBehindEvents="true">
+        <XspParameters Port="8080" Address="127.0.0.1" SslMode="None" SslProtocol="Default" KeyType="None" CertFile="" KeyFile="" PasswordOptions="None" Password="" Verbose="true" />
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+  <ItemGroup>
+    <None Include="lib\Newtonsoft.Json.dll" />
+    <None Include="Content\themes\base\images\Thumbs.db" />
+    <None Include="Content\files\bylaws\2008_Form_990-EZ.pdf" />
+    <None Include="Content\files\bylaws\2009_Form_990-EZ.pdf" />
+    <None Include="Content\files\bylaws\2010_Form_990-EZ.pdf" />
+    <None Include="Content\files\bylaws\bylaws-amended.pdf" />
+    <None Include="Content\files\bylaws\Exemption_YFSC.pdf" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\YaleFigureSkatingClub.Entities\YaleFigureSkatingClub.Entities.csproj">
+      <Project>{CBCA1B0E-83EA-4CA3-A69B-18959B15F2A7}</Project>
+      <Name>YaleFigureSkatingClub.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

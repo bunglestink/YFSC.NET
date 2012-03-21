@@ -1,0 +1,1 @@
+<%@ Application Inherits="YaleFigureSkatingClub.MvcApplication" %>

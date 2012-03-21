@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YaleFigureSkatingClub", "YaleFigureSkatingClub\YaleFigureSkatingClub.csproj", "{4E84C1FD-F93C-4981-A622-E7E4126BBD9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YaleFigureSkatingClub.Entities", "YaleFigureSkatingClub.Entities\YaleFigureSkatingClub.Entities.csproj", "{CBCA1B0E-83EA-4CA3-A69B-18959B15F2A7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4E84C1FD-F93C-4981-A622-E7E4126BBD9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E84C1FD-F93C-4981-A622-E7E4126BBD9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E84C1FD-F93C-4981-A622-E7E4126BBD9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E84C1FD-F93C-4981-A622-E7E4126BBD9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBCA1B0E-83EA-4CA3-A69B-18959B15F2A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBCA1B0E-83EA-4CA3-A69B-18959B15F2A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBCA1B0E-83EA-4CA3-A69B-18959B15F2A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBCA1B0E-83EA-4CA3-A69B-18959B15F2A7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = YaleFigureSkatingClub\YaleFigureSkatingClub.csproj
+	EndGlobalSection
+EndGlobal

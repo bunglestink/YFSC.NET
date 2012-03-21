@@ -1,0 +1,67 @@
+<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
+<!DOCTYPE html>
+<html>
+<head>
+	<asp:ContentPlaceHolder ID="head" runat="server">
+		<title>Yale Figure Skating</title>
+	</asp:ContentPlaceHolder>		
+    <link href="<%= Url.Content("~/Content/Site.css") %>" rel="stylesheet" type="text/css" />
+    <link href="<%= Url.Content("~/Content/ui-lightness/jquery-ui-1.8.16.custom.css") %>" rel="stylesheet" type="text/css" />
+    <script src="<%= Url.Content("~/Scripts/jquery-1.4.4.js") %>" type="text/javascript"></script>
+    <script src="<%= Url.Content("~/Scripts/jquery-ui.min.js") %>" type="text/javascript"></script>
+    <script src="<%= Url.Content("~/Scripts/jquery.tmpl.js") %>" type="text/javascript"></script>
+    <script src="<%= Url.Content("~/Scripts/knockout-1.2.1.js") %>" type="text/javascript"></script> 
+    <script src="<%= Url.Content("~/Scripts/knockout.mapping.js") %>" type="text/javascript"></script> 
+</head>
+<body>
+    <div class="page">
+
+        <div id="header">
+            <div id="title">
+                <img src="<%= Url.Content("~/Content/images/YFSC_emblem_header.png") %>" alt="YFSC" />
+            </div>
+
+            <div id="logindisplay">
+                <% if(Request.IsAuthenticated) { %>
+				    <text>Welcome <b><%= Context.User.Identity.Name %></b>!
+				    [ <%= Html.ActionLink("Member Area", "Index", "Membership") %> | <%= Html.ActionLink("Log Off", "LogOff", "Account") %> ]</text>
+				<% } else { %>
+				    [ <%= Html.ActionLink("Log On", "LogOn", "Account") %> ]
+				<% } %>
+            </div>
+
+            <div id="menucontainer">
+
+                <ul id="menu">
+                    <li><%= Html.ActionLink("Home", "Index", "Home") %></li>
+					<li><%= Html.ActionLink("Program", "Program", "Home") %></li>
+					<li><%= Html.ActionLink("Calendar", "Calendar", "Home") %></li>
+                    <li><%= Html.ActionLink("Coaches", "ClubCoaches", "Home", new { id=(int?)null}, null) %></li>
+					<li><%= Html.ActionLink("Membership", "Membership", "Home") %></li>
+					<li><%= Html.ActionLink("Brochure", "Brochure", "Home") %></li>
+					<li><%= Html.ActionLink("Bylaws", "ByLaws", "Home") %></li>
+					<li><%= Html.ActionLink("Contact", "ContactInformation", "Home") %></li>
+                </ul>
+
+            </div>
+        </div>
+
+		<asp:ContentPlaceHolder ID="RightBar" runat="server">
+			<div id="right-bar">
+				<h3>Yale Figure Skating Club</h3>
+				<img src="<%= Url.Content("~/Content/images/whale.jpg") %>" alt="Whale" />
+				<em>Yale Figure Skating Club, Inc. is a tax-exempt nonprofit organization.</em>
+			</div>
+		</asp:ContentPlaceHolder>
+		
+        <div id="main">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+			</asp:ContentPlaceHolder>
+            <div id="footer">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
