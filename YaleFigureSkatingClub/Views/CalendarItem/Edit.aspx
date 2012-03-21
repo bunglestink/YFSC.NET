@@ -1,4 +1,4 @@
-<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage<YaleFigureSkatingClub.Entities.ViewCalendarItem>" MasterPageFile="~/Views/Layout.master"   %>
+<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage<YaleFigureSkatingClub.Models.ViewCalendarItem>" MasterPageFile="~/Views/Layout.master"   %>
 <asp:Content ContentPlaceHolderID="MainContent" runat="server">	
 	<% if(Model.ID == 0) { %>
 		<h2>Create Calendar Item</h2>

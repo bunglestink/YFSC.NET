@@ -1,4 +1,19 @@
 <%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage<YaleFigureSkatingClub.Entities.Announcement>" MasterPageFile="~/Views/Layout.master"   %>
+<asp:Content ContentPlaceHolderID="AdditionalScripts" runat="server">
+	<script src="<%= Url.Content("~/Scripts/edit_area/edit_area_full.js") %>" type="text/javascript"></script>
+	<script type="text/javascript">
+		editAreaLoader.init({
+			id: 'Body',
+			start_highlight: true,
+			allow_resize: 'both',
+			allow_toggle: false,
+			word_wrap: false,
+			language: 'en',
+			syntax: 'html'
+		});
+	</script>
+</asp:Content>
+
 <asp:Content ContentPlaceHolderID="MainContent" runat="server">	
 	<% if(Model.ID == 0) { %>
 		<h2>Create Announcement</h2>
@@ -15,7 +30,7 @@
 			</div>
 			<div>
 				<label>Date:</label>
-				<%= Html.TextBox("AnnouncementDate", Model.AnnouncementDate.ToShortDateString()) %>
+				<%= Html.TextBox("AnnouncementDate", Model.AnnouncementDate.ToShortDateString(), new { @class="date" }) %>
 			</div>
 			<div>
 				<label>Title:</label>

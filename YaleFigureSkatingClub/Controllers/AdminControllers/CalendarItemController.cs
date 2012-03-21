@@ -65,6 +65,7 @@ namespace YaleFigureSkatingClub
 			item.RegistrationTerm = term;
 			
 			session.SaveOrUpdate(item.ToCalendarItem());
+			TempData["message"] = String.Format("Calendar item '{0}' saved.", item.ID);
 			return RedirectToAction("Index", new { id = item.RegistrationTerm.ID});
 		}
 		
@@ -88,6 +89,7 @@ namespace YaleFigureSkatingClub
 						
 			if (item != null) {
 				session.Delete(item);
+				TempData["message"] = String.Format("Calendar item '{0}' removed.", item.ID);
 			}
 			
 			return RedirectToAction("Index", new { id = item.RegistrationTerm.ID});

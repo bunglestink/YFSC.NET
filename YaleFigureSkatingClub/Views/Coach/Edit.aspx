@@ -14,7 +14,7 @@
 				<%= Html.Hidden("ID", Model.ID) %>
 			</div>
 			<div>
-				<label>Date:</label>
+				<label>Name:</label>
 				<%= Html.TextBox("Name", Model.Name) %>
 			</div>
 			<div>

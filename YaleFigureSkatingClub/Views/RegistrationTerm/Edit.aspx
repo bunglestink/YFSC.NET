@@ -19,11 +19,11 @@
 			</div>
 			<div>
 				<label>Start Date:</label>
-				<%= Html.TextBox("StartDate", Model.StartDate.ToShortDateString()) %>
+				<%= Html.TextBox("StartDate", Model.StartDate.ToShortDateString(), new { @class="date" }) %>
 			</div>
 			<div>
 				<label>End Date:</label>
-				<%= Html.TextBox("EndDate", Model.EndDate.ToShortDateString()) %>
+				<%= Html.TextBox("EndDate", Model.EndDate.ToShortDateString(), new { @class="date" }) %>
 			</div>
 			<div>
 				<label></label>

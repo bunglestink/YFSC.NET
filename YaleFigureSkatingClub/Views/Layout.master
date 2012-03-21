@@ -12,9 +12,41 @@
     <script src="<%= Url.Content("~/Scripts/jquery.tmpl.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/knockout-1.2.1.js") %>" type="text/javascript"></script> 
     <script src="<%= Url.Content("~/Scripts/knockout.mapping.js") %>" type="text/javascript"></script> 
+	<asp:ContentPlaceHolder ID="AdditionalScripts" runat="server"></asp:ContentPlaceHolder>
+	
+	<script type="text/javascript">
+		$(function () {
+			$('.date').datepicker();
+		});
+	</script>
+		
+	<% if(TempData["message"] != null) { %>
+	<script type="text/javascript">
+		$(function () {
+			var message = $('#page').data('message'),
+				$modal = $('<div>')
+				.html(message)
+				.appendTo($('body'))
+				.dialog({
+					modal: true,
+					autoOpen: true,
+					title: 'Message',
+					resizable: false,
+					buttons: {
+						'Ok': function () {
+							$modal.dialog('close');
+						}
+					},
+					close: function () {
+						$modal.remove();
+					}
+				});
+		});
+	</script>
+	<% } %>
 </head>
 <body>
-    <div class="page">
+    <div id="page" class="page" data-message="<%= TempData["message"] %>">
 
         <div id="header">
             <div id="title">

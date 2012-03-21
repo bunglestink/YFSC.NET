@@ -59,6 +59,7 @@ namespace YaleFigureSkatingClub
 		public ActionResult Commit(Coach coach)
 		{
 			session.SaveOrUpdate(coach);
+			TempData["message"] = String.Format("Coach '{0}' saved.", coach.Name);
 			return Redirect(Url.Action ("Index"));
 		}
 		
@@ -88,6 +89,7 @@ namespace YaleFigureSkatingClub
 			
 			if (coach != null) {
 				session.Delete(coach);
+				TempData["message"] = String.Format("Coach '{0}' removed.", coach.Name);
 			}
 			
 			return RedirectToAction("Index");

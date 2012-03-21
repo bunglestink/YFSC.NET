@@ -57,6 +57,7 @@ namespace YaleFigureSkatingClub
 		public ActionResult Commit(RegistrationTerm term)
 		{
 			session.SaveOrUpdate(term);
+			TempData["message"] = String.Format("Registration term '{0}' saved.", term.TermName);
 			return Redirect(Url.Action ("Index"));
 		}
 		
@@ -93,6 +94,7 @@ namespace YaleFigureSkatingClub
 
 			if (term != null) {
 				session.Delete(term);
+				TempData["message"] = String.Format("Registration term '{0}' removed.", term.TermName);
 			}
 				
 			return RedirectToAction("Index");

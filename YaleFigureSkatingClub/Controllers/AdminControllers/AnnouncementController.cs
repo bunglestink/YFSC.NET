@@ -53,12 +53,12 @@ namespace YaleFigureSkatingClub
 			}
 		}
 		
-		
 		[ValidateInput(false)]
 		public ActionResult Commit(Announcement announcement)
 		{
 			session.SaveOrUpdate(announcement);
-			return Redirect(Url.Action ("Index"));
+			TempData["message"] = String.Format("Announcement '{0}' saved.", announcement.Title);
+			return RedirectToAction("Index");
 		}
 		
 		
@@ -87,6 +87,7 @@ namespace YaleFigureSkatingClub
 			
 			if (announcement != null) {
 				session.Delete(announcement);
+				TempData["message"] = String.Format ("Announcement '{0}' removed.", announcement.Title);
 			}
 			
 			return RedirectToAction("Index");
