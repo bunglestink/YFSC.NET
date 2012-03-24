@@ -13,9 +13,9 @@ namespace YaleFigureSkatingClub
 	{
 		public static void RegisterRoutes (RouteCollection routes)
 		{
-			routes.IgnoreRoute ("{resource}.axd/{*pathInfo}");
+			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-			routes.MapRoute (
+			routes.MapRoute(
                 "Default",
                 "{controller}/{action}/{id}",
                 new { controller = "Home", action = "Index", id = "" }
@@ -25,7 +25,7 @@ namespace YaleFigureSkatingClub
 
 		protected void Application_Start ()
 		{
-			RegisterRoutes (RouteTable.Routes);
+			RegisterRoutes(RouteTable.Routes);
 		}
 		
 		protected void Application_BeginRequest(object sender, EventArgs e)
