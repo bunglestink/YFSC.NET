@@ -28,7 +28,11 @@ MODEL = (function () {
 					        skater.MiddleName(this.Registration.MiddleName());
 					        this.Registration.Skaters.push(skater);
 					        $('.datefield').datepicker();
-					    }
+					    };
+					    this.addSession = function (skater) {
+						    viewModel.selectedSkater = skater;
+						    $('#session-selector-dialog').dialog('open');
+						};
 		
 		                callback(viewModel);
 		            }
@@ -37,8 +41,15 @@ MODEL = (function () {
 		    
 		    // get the viewModel, load into view
 		    $.getJSON(currentSessionsUrl, function (data) {
-		        // assign viewModel from server, then try to dataBind
+		        var sessionKey, session;
+		        
 		        viewModel.CurrentSessions = ko.observableArray(data);
+		        for (sessionKey=0; sessionKey < viewModel.CurrentSessions().length; sessionKey++) {
+		        	session = viewModel.CurrentSessions()[sessionKey];
+		        	var date = UTIL.fixJsonDate(session.StartDate);
+		        	session.StartDate = (date.getMonth()+1) + '/' + date.getDate() + '/' + date.getFullYear();
+		        }
+		        
 		        viewModel.dataBind();
 		    });
 		
@@ -55,37 +66,40 @@ MODEL = (function () {
 	/** Registration **/
 	function Registration(data) {
 		var self = $.extend(this, ko.mapping.fromJS(data));
-        self.skaterCount = ko.dependentObservable(function () { return self.Skaters().length; });
+        self.skaterCount = ko.computed(function () { return self.Skaters().length; });
         return self;
 	}
 	
-	Registration.prototype.toJSON = function () {
-        var result = {};
-        result.ID = this.ID();
-        result.FirstName = this.FirstName();
-        result.MiddleName = this.MiddleName();
-        result.LastName = this.LastName();
-        result.Street = this.Street();
-        result.City = this.City();
-        result.State = this.State();
-        result.Zip = this.Zip();
-        result.HomePhone = this.HomePhone();
-        result.WorkPhone = this.WorkPhone();
-        result.Email = this.Email();
-        result.YaleAffiliation = this.YaleAffiliation();
-        result.NameOfAffiliatedPerson = this.NameOfAffiliatedPerson();
-        result.YaleAffiliationType = this.YaleAffiliationType();
-        result.Department = this.Department();
-        result.School = this.School();
-        result.Year = this.Year();
-        result.Skaters = [];
+	Registration.prototype.toJsObject = function () {
+        var result = {
+        	ID: this.ID(),
+			FirstName: this.FirstName(),
+        	MiddleName: this.MiddleName(),
+        	LastName: this.LastName(),
+        	Street: this.Street(),
+        	City: this.City(),
+        	State: this.State(),
+			Zip: this.Zip(),
+			HomePhone: this.HomePhone(),
+			WorkPhone: this.WorkPhone(),
+			Email: this.Email(),
+			YaleAffiliation: this.YaleAffiliation(),
+			NameOfAffiliatedPerson: this.NameOfAffiliatedPerson(),
+			YaleAffiliationType: this.YaleAffiliationType(),
+			Department: this.Department(),
+			School: this.School(),
+			Year: this.Year(),
+			Skaters: []
+		};
+		
         for (var skaterKey in this.Skaters()) {
             var skater = this.Skaters()[skaterKey];
-            var jsonSkater = {};
-            jsonSkater.FirstName = skater.FirstName();
-            jsonSkater.LastName = skater.LastName();
-            result.Skaters.push(jsonSkater);
-        } 
+            result.Skaters.push({
+            	FirstName: skater.FirstName(),
+            	LastName: skater.LastName()
+            });
+        }
+        
         return result;
     };
 	/** End Registration **/
@@ -106,17 +120,13 @@ MODEL = (function () {
 	    this.Level = ko.observable('');
 	    this.Sessions = ko.observableArray([]);
 	    
-	    this.fullName = ko.dependentObservable(function () {
-	        return this.FirstName() + ' ' + this.LastName();
+	    this.fullName = ko.computed(function () {
+	        return (this.FirstName() || '') + ' ' + (this.LastName() || '');
 	    }, this);
 	}
 	
 	Skater.prototype.remove = function () {
 	    this.registration.Skaters.remove(this);
-	};
-	Skater.prototype.addSession = function () {
-	    viewModel.selectedSkater = this;
-	    $('#session-selector-dialog').dialog('open');
 	};
 	/** End Skater **/
 	

@@ -3,12 +3,165 @@
 <asp:Content ContentPlaceHolderID="RightBar" runat="server">
 </asp:Content>
 
+<asp:Content ContentPlaceHolderID="AdditionalScripts" runat="server">
+	<script src="<%= Url.Content("~/Scripts/knockout-2.0.0.js") %>" type="text/javascript"></script> 
+    <script src="<%= Url.Content("~/Scripts/knockout.mapping.js") %>" type="text/javascript"></script> 
+	<script type="text/javascript" src="<%= Url.Content("~/Scripts/Util.js") %>"></script>
+	<script type="text/javascript" src="<%= Url.Content("~/Scripts/Membership/Register.js") %>"></script>
+	<script type="text/javascript">
+		
+		$(function () {
+			
+			// get settings, create and bind view model
+			var settings = $('#registration-area').data(),
+				viewModel;
+		
+			
+			MODEL.ViewModelFactory.Create(
+				settings['current-sessions-url'],
+				settings['registration-base-url'],
+				function (vm) {
+					viewModel = vm;
+	
+					// apply bindings, then show first form
+	                ko.applyBindings(viewModel);
+	                $('#registration-loading').hide();
+	                $('#registration-family').slideDown();
+	
+	                // set datepickers
+	                $('.datefield').datepicker();
+		
+					// register handlers for each nav link
+			        $('#registration-navigation ul a, .navlink').each(function () {
+			            var $this = $(this);
+			            var section = $this.attr('href').substring(1);
+			            var properCaseSection = section.substring(0, 1).toUpperCase() + section.substring(1);
+			
+			            // onclick, hide all sections, then slide down selected
+			            $this.click(function () {
+			                // hide all 
+			                $('#registration-content > fieldset > div').hide();
+			                $('#registration-' + section).slideDown();
+			                $('#registration-content > fieldset > legend').html(properCaseSection);
+			            });
+			        });
+			
+			
+			        // hide dialog for later use...
+			        $('#session-selector-dialog').dialog({
+			            modal: true,
+			            autoOpen: false,
+			            minWidth: 500,
+			            buttons: {
+			                'Add Session': function () {
+			                    var session = new MODEL.SkaterSession(viewModel.selectedSession(), viewModel.selectedSkater);
+			
+			                    // delete any previous records of the session before inserting
+			                    var deletedSession = viewModel.selectedSkater.Sessions.remove(function (item) { return item.ID == session.ID; });
+			                    viewModel.selectedSkater.Sessions.push(session);
+			
+			                    $(this).dialog('close');
+			
+			                    // display error message if returns array (has length duck typing)
+			                    if (deletedSession.length) {
+			                        $('#error-dialog')
+			                            .html(viewModel.selectedSkater.FirstName() + ' ' + viewModel.selectedSkater.LastName() + ' already in ' + session.Name)
+			                            .dialog('open');
+			                    }
+			
+			                    return true;
+			                },
+			                Cancel: function () {
+			                    $(this).dialog('close');
+			                    return false;
+			                }
+			            }
+			        });
+			
+			        // setup error dialog
+			        $('#error-dialog').dialog({
+			            modal: true,
+			            autoOpen: false,
+			            buttons: {
+			                Ok: function () {
+			                    $(this).dialog('close');
+			                    return true;
+			                }
+			            }
+			        });
+			
+			
+			        // setup submit confirmation dialog
+			        $('#confirm-submit-dialog').dialog({
+			            modal: true,
+			            autoOpen: false,
+			            minWidth: 500,
+			            buttons: {
+			                'Ok': function () {
+			                    $(this).dialog('close');
+			
+			                    // validate the Registration model
+			                    var errors = validator.validateRegistration(viewModel.Registration);
+			
+			                    // if there were errors, display
+			                    if (errors.length !== 0) {
+			                        for (errorKey in errors) {
+			                            var error = errors[errorKey];
+			                            $('#error-dialog')
+			                                .html(error)
+			                                .dialog('open');
+			                        }
+			
+			                        return false;
+			                    }
+			                    else {
+			                        var result = viewModel.Registration.toJsObject();
+			                        $.post(settings['create-registration-url'], JSON.stringify(result), function (result) {
+			
+			                        });
+			
+			                        return true;
+			                    }
+			                },
+			
+			                'Cancel': function () {
+			                    $(this).dialog('close');
+			                    return false;
+			                }
+			            }
+			        });
+			
+		
+			        $('#btnSubmitRegistration').click(function () {
+			            $('#confirm-submit-dialog').dialog('open');
+			        });
+			
+			
+			        // set confirm message on unload
+			        window.onbeforeunload = function (e) {
+			            e = e || window.event;
+			            var message = 'Registration has not been submitted.';
+			            // For IE and Firefox prior to version 4
+			            if (e) {
+			                e.returnValue = message;
+			            }
+			            // For Safari
+			            return message;
+			        };
+				});
+	    });
+	</script>		
+</asp:Content>
+
+
+
 <asp:Content ContentPlaceHolderID="MainContent" runat="server">
 
 	<h2>Registration</h2>
 	<div id="registration-area"
 		data-current-sessions-url="<%= Url.Action("Current", "SkatingSessionService") %>"
-		data-registration-base-url="<%= Url.Action("New", "AnnualRegistrationService") %>">
+		data-registration-base-url="<%= Url.Action("New", "AnnualRegistrationService") %>"
+		data-create-registration-url="<%= Url.Action("Create", "AnnualRegistrationService") %>">
 	    <div id="registration-navigation">
 	        <ul>
 	            <li><a href="#family">Family</a> </li>
@@ -158,7 +311,7 @@
 	                <script id="skaterSessionTemplate" type="text/html">
 	                    <li>
 	                        <h3 data-bind="text: fullName"></h3>
-	                        <button data-bind="click: addSession">Add Session</button>
+	                        <button data-bind="click: $parent.addSession">Add Session</button>
 	                        <p data-bind="visible: Sessions().length == 0">No sessions...</p>
 	                        <ul data-bind="template: {name: 'sessionTemplate', foreach: Sessions}"></ul>
 	                    </li>
@@ -356,154 +509,4 @@
 	<div id="confirm-submit-dialog" title="Confirmation">
 	    <p>Are you sure you wish to submit this registration?  Once submitted, changes can only be made in person.</p>
 	</div>
-</asp:Content>
-
-
-<asp:Content ContentPlaceHolderID="AdditionalScripts" runat="server">
-	<script src="<%= Url.Content("~/Scripts/knockout-2.0.0.js") %>" type="text/javascript"></script> 
-    <script src="<%= Url.Content("~/Scripts/knockout.mapping.js") %>" type="text/javascript"></script> 
-	<script type="text/javascript" src="<%= Url.Content("~/Scripts/Membership/Register.js") %>"></script>
-	<script type="text/javascript">
-		
-		$(function () {
-			
-			// get settings, create and bind view model
-			var settings = $('#registration-area').data(),
-				viewModel;
-		
-			
-			MODEL.ViewModelFactory.Create(
-				settings['current-sessions-url'],
-				settings['registration-base-url'],
-				function (vm) {
-					viewModel = vm;
-	
-					// apply bindings, then show first form
-	                ko.applyBindings(viewModel);
-	                $('#registration-loading').hide();
-	                $('#registration-family').slideDown();
-	
-	                // set datepickers
-	                $('.datefield').datepicker();
-		
-					// register handlers for each nav link
-			        $('#registration-navigation ul a, .navlink').each(function () {
-			            var $this = $(this);
-			            var section = $this.attr('href').substring(1);
-			            var properCaseSection = section.substring(0, 1).toUpperCase() + section.substring(1);
-			
-			            // onclick, hide all sections, then slide down selected
-			            $this.click(function () {
-			                // hide all 
-			                $('#registration-content > fieldset > div').hide();
-			                $('#registration-' + section).slideDown();
-			                $('#registration-content > fieldset > legend').html(properCaseSection);
-			            });
-			        });
-			
-			
-			        // hide dialog for later use...
-			        $('#session-selector-dialog').dialog({
-			            modal: true,
-			            autoOpen: false,
-			            minWidth: 500,
-			            buttons: {
-			                'Add Session': function () {
-			                    var session = new SkaterSession(viewModel.selectedSession(), viewModel.selectedSkater);
-			
-			                    // delete any previous records of the session before inserting
-			                    var deletedSession = viewModel.selectedSkater.Sessions.remove(function (item) { return item.ID == session.ID; });
-			                    viewModel.selectedSkater.Sessions.push(session);
-			
-			                    $(this).dialog('close');
-			
-			                    // display error message if returns array (has length duck typing)
-			                    if (deletedSession.length) {
-			                        $('#error-dialog')
-			                            .html(viewModel.selectedSkater.FirstName() + ' ' + viewModel.selectedSkater.LastName() + ' already in ' + session.Name)
-			                            .dialog('open');
-			                    }
-			
-			                    return true;
-			                },
-			                Cancel: function () {
-			                    $(this).dialog('close');
-			                    return false;
-			                }
-			            }
-			        });
-			
-			        // setup error dialog
-			        $('#error-dialog').dialog({
-			            modal: true,
-			            autoOpen: false,
-			            buttons: {
-			                Ok: function () {
-			                    $(this).dialog('close');
-			                    return true;
-			                }
-			            }
-			        });
-			
-			
-			        // setup submit confirmation dialog
-			        $('#confirm-submit-dialog').dialog({
-			            modal: true,
-			            autoOpen: false,
-			            minWidth: 500,
-			            buttons: {
-			                'Ok': function () {
-			                    $(this).dialog('close');
-			
-			                    // validate the Registration model
-			                    var errors = validator.validateRegistration(viewModel.Registration);
-			
-			                    // if there were errors, display
-			                    if (errors.length !== 0) {
-			                        for (errorKey in errors) {
-			                            var error = errors[errorKey];
-			                            $('#error-dialog')
-			                                .html(error)
-			                                .dialog('open');
-			                        }
-			
-			                        return false;
-			                    }
-			                    else {
-			                        var result = viewModel.Registration.toJSON();
-			                        $.post('<%= Url.Action("Create", "AnnualRegistrationService") %>', JSON.stringify(result), function (result) {
-			
-			                        });
-			
-			                        return true;
-			                    }
-			                },
-			
-			                'Cancel': function () {
-			                    $(this).dialog('close');
-			                    return false;
-			                }
-			            }
-			        });
-			
-		
-			        $('#btnSubmitRegistration').click(function () {
-			            $('#confirm-submit-dialog').dialog('open');
-			        });
-			
-			
-			        // set confirm message on unload
-			        window.onbeforeunload = function (e) {
-			            e = e || window.event;
-			            var message = 'Registration has not been submitted.';
-			            // For IE and Firefox prior to version 4
-			            if (e) {
-			                e.returnValue = message;
-			            }
-			            // For Safari
-			            return message;
-			        };
-				});
-	    });
-	</script>		
 </asp:Content>
