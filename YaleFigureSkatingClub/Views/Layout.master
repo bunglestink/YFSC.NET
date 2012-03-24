@@ -10,8 +10,6 @@
     <script src="<%= Url.Content("~/Scripts/jquery-1.4.4.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/jquery-ui.min.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/jquery.tmpl.js") %>" type="text/javascript"></script>
-    <script src="<%= Url.Content("~/Scripts/knockout-1.2.1.js") %>" type="text/javascript"></script> 
-    <script src="<%= Url.Content("~/Scripts/knockout.mapping.js") %>" type="text/javascript"></script> 
 	<asp:ContentPlaceHolder ID="AdditionalScripts" runat="server"></asp:ContentPlaceHolder>
 	
 	<script type="text/javascript">

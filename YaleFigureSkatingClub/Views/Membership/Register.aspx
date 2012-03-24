@@ -6,7 +6,9 @@
 <asp:Content ContentPlaceHolderID="MainContent" runat="server">
 
 	<h2>Registration</h2>
-	<div id="registration-area">
+	<div id="registration-area"
+		data-current-sessions-url="<%= Url.Action("Current", "SkatingSessionService") %>"
+		data-registration-base-url="<%= Url.Action("New", "AnnualRegistrationService") %>">
 	    <div id="registration-navigation">
 	        <ul>
 	            <li><a href="#family">Family</a> </li>
@@ -114,8 +116,8 @@
 	
 	
 	            <div id="registration-skaters">
-	                <button data-bind='click: Registration.addSkater'>Add Skater</button>
-	                <button data-bind='click: Registration.copySkater'>Copy Skater From Family</button>
+	                <button data-bind='click: addSkater'>Add Skater</button>
+	                <button data-bind='click: copySkater'>Copy Skater From Family</button>
 	                <div id="registration-skaters-labels">
 	                    <label>First Name</label>
 	                    <label>Middle Name</label>
@@ -354,268 +356,154 @@
 	<div id="confirm-submit-dialog" title="Confirmation">
 	    <p>Are you sure you wish to submit this registration?  Once submitted, changes can only be made in person.</p>
 	</div>
-	
-	<script type="text/javascript" src="<%= Url.Content("~/Scripts/validator.js") %>"></script>
+</asp:Content>
+
+
+<asp:Content ContentPlaceHolderID="AdditionalScripts" runat="server">
+	<script src="<%= Url.Content("~/Scripts/knockout-2.0.0.js") %>" type="text/javascript"></script> 
+    <script src="<%= Url.Content("~/Scripts/knockout.mapping.js") %>" type="text/javascript"></script> 
+	<script type="text/javascript" src="<%= Url.Content("~/Scripts/Membership/Register.js") %>"></script>
 	<script type="text/javascript">
-	    // create a new view model
-	    var viewModel = {
-	        // determines wether the data is finished loading
-	        loadingComplete: function () {
-	            return this.Registration && this.CurrentSessions;
-	        },
+		
+		$(function () {
+			
+			// get settings, create and bind view model
+			var settings = $('#registration-area').data(),
+				viewModel;
+		
+			
+			MODEL.ViewModelFactory.Create(
+				settings['current-sessions-url'],
+				settings['registration-base-url'],
+				function (vm) {
+					viewModel = vm;
 	
-	        // tries to bind the data, only if complete
-	        dataBind: function () {
-	            if (this.loadingComplete()) {
-	                // bind selected session
-	                this.selectedSession = ko.observable(this.CurrentSessions[0]);
-	
-	                // apply bindings, then show first form
+					// apply bindings, then show first form
 	                ko.applyBindings(viewModel);
 	                $('#registration-loading').hide();
 	                $('#registration-family').slideDown();
 	
 	                // set datepickers
 	                $('.datefield').datepicker();
-	            }
-	        }
-	    };
-	
-	
-	
-	    /** Skater **/
-	    function Skater() {
-	        this.ID = ko.observable(0);
-	        this.FirstName = ko.observable('');
-	        this.MiddleName = ko.observable('');
-	        this.LastName = ko.observable('');
-	        this.Sex = ko.observable('');
-	        this.USCitizen = ko.observable(true);
-	        this.BirthDate = ko.observable('');
-	        this.NewRegistrant = ko.observable(true);
-	        this.Level = ko.observable('');
-	        this.Sessions = ko.observableArray([]);
-	        
-	        this.fullName = ko.dependentObservable(function () {
-	            return this.FirstName() + ' ' + this.LastName();
-	        }, this);
-	    }
-	
-	    Skater.prototype.remove = function () {
-	        viewModel.Registration.Skaters.remove(this);
-	    };
-	    Skater.prototype.addSession = function () {
-	        viewModel.selectedSkater = this;
-	        $('#session-selector-dialog').dialog('open');
-	    };
-	    /** End Skater **/
-	
-	
-	    /** SkaterSession - represents a skater session **/
-	    function SkaterSession(session, skater) {
-	        this.ID = session.ID;
-	        this.Name = session.Name;
-	        this.StartDate = session.StartDate;
-	        this.DayOfWeek = session.DayOfWeek;
-	        this.StartTime = session.StartTime;
-	        this.EndTime = session.EndTime;
-	        this.TotalCost = session.TotalCost;
-	        this.WeeksDuration = session.WeeksDuration;
-	        this.Description = session.Description;
-	        
-	        this.Skater = skater;
-	    };
-	    SkaterSession.prototype.remove = function() {
-	        this.Skater.Sessions.remove(this);
-	    };
-	    /** End SkaterSession **/
-	
-	
-	    // get the viewModel, load into view
-	    $.getJSON('<%= Url.Action("Current", "SkatingSessionService") %>', function (data) {
-	        
-	        // assign viewModel from server, then try to dataBind
-	        viewModel.CurrentSessions = ko.observableArray(data);
-	        viewModel.dataBind();
+		
+					// register handlers for each nav link
+			        $('#registration-navigation ul a, .navlink').each(function () {
+			            var $this = $(this);
+			            var section = $this.attr('href').substring(1);
+			            var properCaseSection = section.substring(0, 1).toUpperCase() + section.substring(1);
+			
+			            // onclick, hide all sections, then slide down selected
+			            $this.click(function () {
+			                // hide all 
+			                $('#registration-content > fieldset > div').hide();
+			                $('#registration-' + section).slideDown();
+			                $('#registration-content > fieldset > legend').html(properCaseSection);
+			            });
+			        });
+			
+			
+			        // hide dialog for later use...
+			        $('#session-selector-dialog').dialog({
+			            modal: true,
+			            autoOpen: false,
+			            minWidth: 500,
+			            buttons: {
+			                'Add Session': function () {
+			                    var session = new SkaterSession(viewModel.selectedSession(), viewModel.selectedSkater);
+			
+			                    // delete any previous records of the session before inserting
+			                    var deletedSession = viewModel.selectedSkater.Sessions.remove(function (item) { return item.ID == session.ID; });
+			                    viewModel.selectedSkater.Sessions.push(session);
+			
+			                    $(this).dialog('close');
+			
+			                    // display error message if returns array (has length duck typing)
+			                    if (deletedSession.length) {
+			                        $('#error-dialog')
+			                            .html(viewModel.selectedSkater.FirstName() + ' ' + viewModel.selectedSkater.LastName() + ' already in ' + session.Name)
+			                            .dialog('open');
+			                    }
+			
+			                    return true;
+			                },
+			                Cancel: function () {
+			                    $(this).dialog('close');
+			                    return false;
+			                }
+			            }
+			        });
+			
+			        // setup error dialog
+			        $('#error-dialog').dialog({
+			            modal: true,
+			            autoOpen: false,
+			            buttons: {
+			                Ok: function () {
+			                    $(this).dialog('close');
+			                    return true;
+			                }
+			            }
+			        });
+			
+			
+			        // setup submit confirmation dialog
+			        $('#confirm-submit-dialog').dialog({
+			            modal: true,
+			            autoOpen: false,
+			            minWidth: 500,
+			            buttons: {
+			                'Ok': function () {
+			                    $(this).dialog('close');
+			
+			                    // validate the Registration model
+			                    var errors = validator.validateRegistration(viewModel.Registration);
+			
+			                    // if there were errors, display
+			                    if (errors.length !== 0) {
+			                        for (errorKey in errors) {
+			                            var error = errors[errorKey];
+			                            $('#error-dialog')
+			                                .html(error)
+			                                .dialog('open');
+			                        }
+			
+			                        return false;
+			                    }
+			                    else {
+			                        var result = viewModel.Registration.toJSON();
+			                        $.post('<%= Url.Action("Create", "AnnualRegistrationService") %>', JSON.stringify(result), function (result) {
+			
+			                        });
+			
+			                        return true;
+			                    }
+			                },
+			
+			                'Cancel': function () {
+			                    $(this).dialog('close');
+			                    return false;
+			                }
+			            }
+			        });
+			
+		
+			        $('#btnSubmitRegistration').click(function () {
+			            $('#confirm-submit-dialog').dialog('open');
+			        });
+			
+			
+			        // set confirm message on unload
+			        window.onbeforeunload = function (e) {
+			            e = e || window.event;
+			            var message = 'Registration has not been submitted.';
+			            // For IE and Firefox prior to version 4
+			            if (e) {
+			                e.returnValue = message;
+			            }
+			            // For Safari
+			            return message;
+			        };
+				});
 	    });
-	
-	    $.getJSON('<%= Url.Action("New", "AnnualRegistrationService") %>', function (data) {
-	
-	        // assign viewModel from server
-	        viewModel.Registration = ko.mapping.fromJS(data);
-	
-	        viewModel.Registration.toJSON = function () {
-	            var result = {};
-	            result.ID = this.ID();
-	            result.FirstName = this.FirstName();
-	            result.MiddleName = this.MiddleName();
-	            result.LastName = this.LastName();
-	            result.Street = this.Street();
-	            result.City = this.City();
-	            result.State = this.State();
-	            result.Zip = this.Zip();
-	            result.HomePhone = this.HomePhone();
-	            result.WorkPhone = this.WorkPhone();
-	            result.Email = this.Email();
-	            result.YaleAffiliation = this.YaleAffiliation();
-	            result.NameOfAffiliatedPerson = this.NameOfAffiliatedPerson();
-	            result.YaleAffiliationType = this.YaleAffiliationType();
-	            result.Department = this.Department();
-	            result.School = this.School();
-	            result.Year = this.Year();
-	            result.Skaters = [];
-	            for (var skaterKey in this.Skaters()) {
-	                var skater = this.Skaters()[skaterKey];
-	                var jsonSkater = {};
-	                jsonSkater.FirstName = skater.FirstName();
-	                jsonSkater.LastName = skater.LastName();
-	                result.Skaters.push(jsonSkater);
-	            }
-	
-	            return result;
-	        };
-	
-	        viewModel.Registration.addSkater = function () {
-	            this.Registration.Skaters.push(new Skater());
-	            $('.datefield').datepicker();
-	        };
-	        viewModel.Registration.copySkater = function () {
-	            var skater = new Skater();
-	            skater.FirstName(viewModel.Registration.FirstName());
-	            skater.LastName(viewModel.Registration.LastName());
-	            skater.MiddleName(viewModel.Registration.MiddleName());
-	            this.Registration.Skaters.push(skater);
-	            $('.datefield').datepicker();
-	        };
-	
-	        viewModel.Registration.skaterCount = ko.dependentObservable(function () { return this.Skaters().length; }, viewModel.Registration);
-	
-	        // try to data bind
-	        viewModel.dataBind();
-	    });
-	
-	
-	
-	
-	    // on document ready, load handlers
-	    $(function () {
-	
-	        // register handlers for each nav link
-	        $('#registration-navigation ul a, .navlink').each(function () {
-	            var $this = $(this);
-	            var section = $this.attr('href').substring(1);
-	            var properCaseSection = section.substring(0, 1).toUpperCase() + section.substring(1);
-	
-	            // onclick, hide all sections, then slide down selected
-	            $this.click(function () {
-	                // hide all 
-	                $('#registration-content > fieldset > div').hide();
-	                $('#registration-' + section).slideDown();
-	                $('#registration-content > fieldset > legend').html(properCaseSection);
-	            });
-	        });
-	
-	
-	        // hide dialog for later use...
-	        $('#session-selector-dialog').dialog({
-	            modal: true,
-	            autoOpen: false,
-	            minWidth: 500,
-	            buttons: {
-	                'Add Session': function () {
-	                    var session = new SkaterSession(viewModel.selectedSession(), viewModel.selectedSkater);
-	
-	                    // delete any previous records of the session before inserting
-	                    var deletedSession = viewModel.selectedSkater.Sessions.remove(function (item) { return item.ID == session.ID; });
-	                    viewModel.selectedSkater.Sessions.push(session);
-	
-	                    $(this).dialog('close');
-	
-	                    // display error message if returns array (has length duck typing)
-	                    if (deletedSession.length) {
-	                        $('#error-dialog')
-	                            .html(viewModel.selectedSkater.FirstName() + ' ' + viewModel.selectedSkater.LastName() + ' already in ' + session.Name)
-	                            .dialog('open');
-	                    }
-	
-	                    return true;
-	                },
-	                Cancel: function () {
-	                    $(this).dialog('close');
-	                    return false;
-	                }
-	            }
-	        });
-	
-	        // setup error dialog
-	        $('#error-dialog').dialog({
-	            modal: true,
-	            autoOpen: false,
-	            buttons: {
-	                Ok: function () {
-	                    $(this).dialog('close');
-	                    return true;
-	                }
-	            }
-	        });
-	
-	
-	        // setup submit confirmation dialog
-	        $('#confirm-submit-dialog').dialog({
-	            modal: true,
-	            autoOpen: false,
-	            minWidth: 500,
-	            buttons: {
-	                'Ok': function () {
-	                    $(this).dialog('close');
-	
-	                    // validate the Registration model
-	                    var errors = validator.validateRegistration(viewModel.Registration);
-	
-	                    // if there were errors, display
-	                    if (errors.length !== 0) {
-	                        for (errorKey in errors) {
-	                            var error = errors[errorKey];
-	                            $('#error-dialog')
-	                                .html(error)
-	                                .dialog('open');
-	                        }
-	
-	                        return false;
-	                    }
-	                    else {
-	                        var result = viewModel.Registration.toJSON();
-	                        $.post('<%= Url.Action("Create", "AnnualRegistrationService") %>', JSON.stringify(result), function (result) {
-	
-	                        });
-	
-	                        return true;
-	                    }
-	                },
-	
-	                'Cancel': function () {
-	                    $(this).dialog('close');
-	                    return false;
-	                }
-	            }
-	        });
-	
-	        $('#btnSubmitRegistration').click(function () {
-	            $('#confirm-submit-dialog').dialog('open');
-	        });
-	
-	
-	        // set confirm message on unload
-	        window.onbeforeunload = function (e) {
-	            e = e || window.event;
-	            var message = 'Registration has not been submitted.';
-	            // For IE and Firefox prior to version 4
-	            if (e) {
-	                e.returnValue = message;
-	            }
-	            // For Safari
-	            return message;
-	        };
-	    });
-	</script>	
+	</script>		
 </asp:Content>
