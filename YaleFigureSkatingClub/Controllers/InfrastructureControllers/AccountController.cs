@@ -14,23 +14,20 @@ namespace YaleFigureSkatingClub
 	{	
 		public ActionResult LogOn(User user, string returnUrl)
 		{
-			if (ModelState.IsValid)
-            {
-                if (Membership.ValidateUser(user.Username, user.Password))
-                {
+			if (ModelState.IsValid) {
+                
+				if (Membership.ValidateUser(user.Username, user.Password)) {
+				
 					FormsAuthentication.SetAuthCookie(user.Username, false);	
 					
-                    if (String.IsNullOrEmpty(returnUrl))
-                    {
+                    if (String.IsNullOrEmpty(returnUrl)) {
                         return RedirectToAction("Index", "Membership");
                     }
-                    else
-                    {
+                    else {
 						return Redirect(returnUrl);
                     }
                 }
-                else
-                {
+                else {
                     ModelState.AddModelError("", "The user name or password provided is incorrect.");
                 }
             }
