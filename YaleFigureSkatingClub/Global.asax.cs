@@ -26,6 +26,7 @@ namespace YaleFigureSkatingClub
 		protected void Application_Start ()
 		{
 			RegisterRoutes(RouteTable.Routes);
+			ModelBinders.Binders.DefaultBinder = new JsonModelBinder();
 		}
 		
 		protected void Application_BeginRequest(object sender, EventArgs e)
