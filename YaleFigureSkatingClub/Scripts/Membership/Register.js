@@ -3,7 +3,7 @@ MODEL = (function () {
 	
 	var ViewModelFactory = {
 		
-		Create: function (currentSessionsUrl, registrationBaseUrl, callback) {
+		Create: function (currentSessionsUrl, registrationBaseUrl, getRegistrationCostUrl, callback) {
 			var viewModel = {
 		        // determines wether the data is finished loading
 		        loadingComplete: function () {
@@ -15,6 +15,7 @@ MODEL = (function () {
 		            if (this.loadingComplete()) {
 		                // bind selected session
 		                this.selectedSession = ko.observable(this.CurrentSessions[0]);
+		                this.TotalCost = ko.observable(0);
 		                
 		                // build view methods
 		                this.addSkater = function () {
@@ -32,6 +33,28 @@ MODEL = (function () {
 					    this.addSession = function (skater) {
 						    viewModel.selectedSkater = skater;
 						    $('#session-selector-dialog').dialog('open');
+						};
+						
+						this.refreshTotalCost = function () {
+							var data = viewModel.Registration.toJsObject();
+							
+							viewModel.TotalCost('calculating...');
+							
+							$.ajax({
+								url: getRegistrationCostUrl,
+								type: 'post',
+								contentType: 'application/json',
+								data: JSON.stringify(data),
+								success: function (totalCost) {
+									viewModel.TotalCost(totalCost);
+									return true;
+								},
+								error: function (jqXhr, statusText) {
+									UTIL.alert('Error calculating cost: <br /><br />', statusText);
+									return true;
+								}
+							});
+							return true;
 						};
 		
 		                callback(viewModel);
@@ -71,6 +94,10 @@ MODEL = (function () {
 	}
 	
 	Registration.prototype.toJsObject = function () {
+		if (!(this instanceof Registration)) {
+			return;
+		}
+	
         var result = {
         	ID: this.ID(),
 			FirstName: this.FirstName(),
@@ -93,10 +120,20 @@ MODEL = (function () {
 		};
 		
         for (var skaterKey in this.Skaters()) {
-            var skater = this.Skaters()[skaterKey];
+            var skater = this.Skaters()[skaterKey],
+            	sessions = [];
+            for (var sessionKey in skater.Sessions()) {
+            	var session = skater.Sessions()[sessionKey];
+            	sessions.push({
+            		ID: session.ID,
+            		TotalCost: session.TotalCost
+            	});
+            }
+            
             result.Skaters.push({
             	FirstName: skater.FirstName(),
-            	LastName: skater.LastName()
+            	LastName: skater.LastName(),
+            	Sessions: sessions
             });
         }
         

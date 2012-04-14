@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using YaleFigureSkatingClub.BusinessLayer;
 using YaleFigureSkatingClub.Entities;
 using YaleFigureSkatingClub.Infrastructure;
-using Newtonsoft.Json;
 using NHibernate;
 
 namespace YaleFigureSkatingClub.Controllers
@@ -27,17 +26,27 @@ namespace YaleFigureSkatingClub.Controllers
         {  
             return Json(new AnnualRegistration());
         }
-
-        public string Create(AnnualRegistration registration)
+		
+		
+        public JsonResult Create(AnnualRegistration registration)
         {
-            //TODO: verify that user isn't already registered, save to DB, run invoice
-            return "successfully registered";
+			if (!ModelState.IsValid) {
+				var errors = ModelState
+					.Where (m => m.Value.Errors.Any())
+					.SelectMany (m => m.Value.Errors.Select (e => e.ErrorMessage));
+					
+				return Json (errors);
+			}
+			
+			registrationService.SubmitRegistration(registration);
+			return Json(true);
         }
 		
 		
 		public ActionResult GetCost(AnnualRegistration registration)
 		{
-			return Json(registrationService.GetRegistrationCost(registration));
+            return Json(
+				String.Format ("{0:c}", registrationService.GetRegistrationCost(registration)));
 		}
     }
 }

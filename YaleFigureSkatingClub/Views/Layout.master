@@ -16,17 +16,14 @@
 	<script type="text/javascript">
 		$(function () {
 			$('.date').datepicker();
-		});
-	</script>
-		
-	<% if(TempData["message"] != null) { %>
-	<script type="text/javascript">
-		$(function () {
+			$('input:submit, button').button()
+
 			var message = $('#page').data('message');
-			UTIL.alert(message);
+			if (message) {
+				UTIL.alert(message);
+			}
 		});
 	</script>
-	<% } %>
 </head>
 <body>
     <div id="page" class="page" data-message="<%= TempData["message"] %>">

@@ -6,9 +6,16 @@
 <asp:Content ContentPlaceHolderID="AdditionalScripts" runat="server">
 	<script src="<%= Url.Content("~/Scripts/knockout-2.0.0.js") %>" type="text/javascript"></script> 
     <script src="<%= Url.Content("~/Scripts/knockout.mapping.js") %>" type="text/javascript"></script> 
-	<script type="text/javascript" src="<%= Url.Content("~/Scripts/Util.js") %>"></script>
+	<script type="text/javascript" src="<%= Url.Content("~/Scripts/Util/fix-json-date.js") %>"></script>
 	<script type="text/javascript" src="<%= Url.Content("~/Scripts/Membership/Register.js") %>"></script>
 	<script type="text/javascript">
+		
+		
+		ko.bindingHandlers.button = {
+			init: function (element) {
+				$(element).button();
+			}
+		};
 		
 		$(function () {
 			
@@ -20,6 +27,7 @@
 			MODEL.ViewModelFactory.Create(
 				settings['current-sessions-url'],
 				settings['registration-base-url'],
+				settings['get-registration-cost-url'],
 				function (vm) {
 					viewModel = vm;
 	
@@ -100,28 +108,32 @@
 			                'Ok': function () {
 			                    $(this).dialog('close');
 			
-			                    // validate the Registration model
-			                    var errors = validator.validateRegistration(viewModel.Registration);
-			
-			                    // if there were errors, display
-			                    if (errors.length !== 0) {
-			                        for (errorKey in errors) {
-			                            var error = errors[errorKey];
-			                            $('#error-dialog')
-			                                .html(error)
-			                                .dialog('open');
-			                        }
-			
-			                        return false;
-			                    }
-			                    else {
-			                        var result = viewModel.Registration.toJsObject();
-			                        $.post(settings['create-registration-url'], JSON.stringify(result), function (result) {
-			
-			                        });
-			
-			                        return true;
-			                    }
+			                    var result = viewModel.Registration.toJsObject();
+		                        $.ajax({
+									url: settings['create-registration-url'], 
+									data: JSON.stringify(result), 
+									type: 'POST',
+									contentType: 'application/json',
+									success: function (result) {
+										if (result === true) {
+											UTIL.alert('success!');
+											return;
+										}
+										
+										// if not true, model errors: 
+										var message = '<p>The following errors were encountered: </p></ul>';
+										
+										for (var i = 0; i < result.length; i++) {
+											message += '<li>' + result[i] + '</li>';
+										}
+										UTIL.alert(message);
+									},
+									error: function (jqXhr, statusText) {
+										UTIL.alert('An unknown error has occurred: <br /><br />' + statusText);
+									}
+		                        });
+		
+		                        return true;
 			                },
 			
 			                'Cancel': function () {
@@ -161,13 +173,14 @@
 	<div id="registration-area"
 		data-current-sessions-url="<%= Url.Action("Current", "SkatingSessionService") %>"
 		data-registration-base-url="<%= Url.Action("New", "AnnualRegistrationService") %>"
-		data-create-registration-url="<%= Url.Action("Create", "AnnualRegistrationService") %>">
+		data-create-registration-url="<%= Url.Action("Create", "AnnualRegistrationService") %>"
+		data-get-registration-cost-url="<%= Url.Action("GetCost", "AnnualRegistrationService") %>">
 	    <div id="registration-navigation">
 	        <ul>
 	            <li><a href="#family">Family</a> </li>
 	            <li>&gt; <a href="#skaters">Skaters</a> </li>
 	            <li>&gt; <a href="#sessions">Sessions</a> </li>
-	            <li>&gt; <a href="#confirmation">Confirmation</a> </li>
+	            <li>&gt; <a href="#confirmation" data-bind="click: refreshTotalCost">Confirmation</a> </li>
 	        </ul>
 	    </div>
 	
@@ -275,8 +288,8 @@
 	                    <label>First Name</label>
 	                    <label>Middle Name</label>
 	                    <label>Last Name</label>
-	                    <label>Sex</label>
-	                    <label>US Citizen?</label>
+	                    <label class="registration-skaters-sex">Sex</label>
+	                    <label class="registration-skaters-us-citizen">US Citizen?</label>
 	                    <label>DOB</label>
 	                    <label>New Registrant?</label>
 	                    <label>Level</label>
@@ -289,12 +302,12 @@
 	                        <input data-bind="value: FirstName" />
 	                        <input data-bind="value: MiddleName" />
 	                        <input data-bind="value: LastName" />
-	                        <input data-bind="value: Sex" />
-	                        <input data-bind="checked: USCitizen" type="checkbox" />
+	                        <input data-bind="value: Sex" class="registration-skaters-sex" />
+	                        <input data-bind="checked: USCitizen" type="checkbox" class="registration-skaters-us-citizen" />
 	                        <input data-bind="value: BirthDate" class="datefield" />
 	                        <input data-bind="checked: NewRegistrant" type="checkbox" />
 	                        <input data-bind="value: Level" />
-	                        <button data-bind="click: remove">Remove</button>
+	                        <button data-bind="click: remove, button: true">Remove</button>
 	                    </li>
 	                </script>
 	
@@ -311,16 +324,16 @@
 	                <script id="skaterSessionTemplate" type="text/html">
 	                    <li>
 	                        <h3 data-bind="text: fullName"></h3>
-	                        <button data-bind="click: $parent.addSession">Add Session</button>
+	                        <button data-bind="click: $parent.addSession, button: true">Add Session</button>
 	                        <p data-bind="visible: Sessions().length == 0">No sessions...</p>
 	                        <ul data-bind="template: {name: 'sessionTemplate', foreach: Sessions}"></ul>
 	                    </li>
 	                </script>
 	                <script id="sessionTemplate" type="text/html">
 	                    <li>
-	                        <span data-bind="text: Name" class="ergistration-session-name"></span>
+	                        <span data-bind="text: Name" class="registration-session-name"></span>
 	                         &#36<span data-bind="text: TotalCost" class="registration-session-cost"></span>
-	                        <button data-bind="click: remove">Remove</button>
+	                        <button data-bind="click: remove, button: true">Remove</button>
 	                    </li>
 	                </script>
 	
@@ -332,9 +345,15 @@
 	            </div>
 	
 	            <div id="registration-confirmation">
-	                <h3>The <span data-bind="text: Registration.LastName"></span> Family Registration</h3>
+	                <div id="submit-area">
+	                    <label>Total Cost:</label>
+	                    <label data-bind="text: TotalCost"></label>
+						<button id="btnSubmitRegistration">Submit Registration</button>
+	                </div>
+		
+					<h3>The <span data-bind="text: Registration.LastName"></span> Family Registration</h3>
 	                <p>Please confirm that the below information is correct before proceeding:</p>
-	                
+		
 	                <h4>Family Information</h4>
 	                <div id="confirmation-family-left">
 	                    <div>
@@ -420,7 +439,7 @@
 	                <ul class="nolist" data-bind="template: {name: 'skaterConfirmTemplate', foreach: Registration.Skaters}">
 	                </ul>
 	                <script id="skaterConfirmTemplate" type="text/html">
-	                    <li>
+						<li>
 	                        <div>
 	                            <label>Name:</label>
 	                            <span data-bind="text: FirstName" /> <span data-bind="text: MiddleName" /> <span data-bind="text: LastName" /> 
@@ -457,13 +476,6 @@
 	                    </li>
 	                </script>
 	                
-	                <br />
-	                <div>
-	                    <label>Total Cost:</label>
-	                    <label></label>
-	                </div>
-	                <br />
-	                <button id="btnSubmitRegistration">Submit Registration</button>
 	
 	                <div>
 	                    <br />
