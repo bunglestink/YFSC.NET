@@ -41,5 +41,12 @@ namespace YaleFigureSkatingClub
 		{
 			NHSessionManager.CloseSession();
 		}
+		
+		protected void Application_Error(object sender, EventArgs e)
+		{
+			var error = Server.GetLastError();
+			Console.WriteLine (error.Message);
+			Console.WriteLine (error.StackTrace);
+		}
 	}
 }
