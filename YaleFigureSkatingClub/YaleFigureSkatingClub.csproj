@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\files\attach\" />
+    <Folder Include="Scripts\Util\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
@@ -262,7 +263,8 @@
     <Content Include="Scripts\edit_area\reg_syntax\js.js" />
     <Content Include="Scripts\Membership\Register.js" />
     <Content Include="Scripts\knockout-2.0.0.js" />
-    <Content Include="Scripts\Util.js" />
+    <Content Include="Scripts\Util\alert.js" />
+    <Content Include="Scripts\Util\fix-json-date.js" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
@@ -291,7 +293,6 @@
     </VisualStudio>
   </ProjectExtensions>
   <ItemGroup>
-    <None Include="lib\Newtonsoft.Json.dll" />
     <None Include="Content\themes\base\images\Thumbs.db" />
     <None Include="Content\files\bylaws\2008_Form_990-EZ.pdf" />
     <None Include="Content\files\bylaws\2009_Form_990-EZ.pdf" />

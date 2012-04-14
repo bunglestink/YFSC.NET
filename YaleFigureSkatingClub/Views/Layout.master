@@ -10,6 +10,7 @@
     <script src="<%= Url.Content("~/Scripts/jquery-1.4.4.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/jquery-ui.min.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/jquery.tmpl.js") %>" type="text/javascript"></script>
+	<script src="<%= Url.Content("~/Scripts/Util/alert.js") %>" type="text/javascript"></script>
 	<asp:ContentPlaceHolder ID="AdditionalScripts" runat="server"></asp:ContentPlaceHolder>
 	
 	<script type="text/javascript">
@@ -21,24 +22,8 @@
 	<% if(TempData["message"] != null) { %>
 	<script type="text/javascript">
 		$(function () {
-			var message = $('#page').data('message'),
-				$modal = $('<div>')
-				.html(message)
-				.appendTo($('body'))
-				.dialog({
-					modal: true,
-					autoOpen: true,
-					title: 'Message',
-					resizable: false,
-					buttons: {
-						'Ok': function () {
-							$modal.dialog('close');
-						}
-					},
-					close: function () {
-						$modal.remove();
-					}
-				});
+			var message = $('#page').data('message');
+			UTIL.alert(message);
 		});
 	</script>
 	<% } %>
