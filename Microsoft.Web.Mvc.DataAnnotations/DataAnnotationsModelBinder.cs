@@ -51,7 +51,7 @@
                     ModelType = propertyDescriptor.PropertyType,
                     ValueProvider = bindingContext.ValueProvider
                 };
-
+				
                 IModelBinder binder = Binders.GetBinder(propertyDescriptor.PropertyType);
                 object newPropertyValue = ConvertValue(propertyDescriptor, binder.BindModel(controllerContext, innerContext));
                 ModelState modelState = bindingContext.ModelState[fullPropertyKey];
@@ -85,23 +85,19 @@
         /// <inheritdoc/>
         protected override void OnModelUpdated(ControllerContext controllerContext,
                                                ModelBindingContext bindingContext) {
-            // Base version calls IDataErrorInfo
+			// Base version calls IDataErrorInfo
             base.OnModelUpdated(controllerContext, bindingContext);
 
             // If the model is invalid, don't run model-level validation rules
             if (!ModelIsValid(bindingContext)) {
                 return;
             }
-
-            var typeDescriptor = GetTypeDescriptor(bindingContext.Model, bindingContext.ModelType);
-            var validationContext = new ValidationContext(bindingContext.Model, null, null);
-            validationContext.DisplayName = GetDisplayName(typeDescriptor);
-
-            ValidationResult validationResult;
-
+			
+			var typeDescriptor = GetTypeDescriptor(bindingContext.Model, bindingContext.ModelType);
+			
             foreach (ValidationAttribute attribute in typeDescriptor.GetAttributes<ValidationAttribute>()) {
-                if (!attribute.TryValidate(bindingContext.Model, validationContext, out validationResult)) {
-                    bindingContext.ModelState.AddModelError(bindingContext.ModelName, validationResult.ErrorMessage);
+				if (!attribute.IsValid (bindingContext.Model)) {
+                    bindingContext.ModelState.AddModelError(bindingContext.ModelName, attribute.FormatErrorMessage(bindingContext.ModelName));
                 }
             }
         }
@@ -112,16 +108,13 @@
                                                      PropertyDescriptor propertyDescriptor,
                                                      object value) {
             string modelStateKey = CreateSubPropertyName(bindingContext.ModelName, propertyDescriptor.Name);
-            var validationContext = new ValidationContext(bindingContext.Model, null, null);
-            validationContext.DisplayName = GetDisplayName(propertyDescriptor);
 
             bool result = true;
-            ValidationResult validationResult;
 
             foreach (ValidationAttribute attribute in GetValidationAttributes(propertyDescriptor)) {
-                if (!attribute.TryValidate(value, validationContext, out validationResult)) {
-                    bindingContext.ModelState.AddModelError(modelStateKey, validationResult.ErrorMessage);
-                    result = false;
+                if (!attribute.IsValid (bindingContext.Model)) {
+                    bindingContext.ModelState.AddModelError(bindingContext.ModelName, attribute.FormatErrorMessage(bindingContext.ModelName));
+					result = false;
                 }
             }
 
@@ -174,10 +167,6 @@
         /// <param name="descriptor">The property's property descriptor</param>
         /// <returns>The display name of the property</returns>
         internal static string GetDisplayName(PropertyDescriptor descriptor) {
-            var displayAttribute = descriptor.GetAttribute<DisplayAttribute>();
-            if (displayAttribute != null && !String.IsNullOrEmpty(displayAttribute.Name)) {
-                return displayAttribute.Name;
-            }
 
             var displayNameAttribute = descriptor.GetAttribute<DisplayNameAttribute>();
             if (displayNameAttribute != null && !String.IsNullOrEmpty(displayNameAttribute.DisplayName)) {

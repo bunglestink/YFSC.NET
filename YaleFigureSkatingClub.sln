@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YaleFigureSkatingClub.Entit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YaleFigureSkatingClub.BusinessLayer", "YaleFigureSkatingClub.BusinessLayer\YaleFigureSkatingClub.BusinessLayer.csproj", "{906AB754-4656-4A47-9F2A-E3531769D1E3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Web.Mvc.DataAnnotations", "Microsoft.Web.Mvc.DataAnnotations\Microsoft.Web.Mvc.DataAnnotations.csproj", "{7F96897E-0C3A-498C-BD2F-5BB89EFC9F71}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,10 @@ Global
 		{4E84C1FD-F93C-4981-A622-E7E4126BBD9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E84C1FD-F93C-4981-A622-E7E4126BBD9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E84C1FD-F93C-4981-A622-E7E4126BBD9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F96897E-0C3A-498C-BD2F-5BB89EFC9F71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F96897E-0C3A-498C-BD2F-5BB89EFC9F71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F96897E-0C3A-498C-BD2F-5BB89EFC9F71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F96897E-0C3A-498C-BD2F-5BB89EFC9F71}.Release|Any CPU.Build.0 = Release|Any CPU
 		{906AB754-4656-4A47-9F2A-E3531769D1E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{906AB754-4656-4A47-9F2A-E3531769D1E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{906AB754-4656-4A47-9F2A-E3531769D1E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
