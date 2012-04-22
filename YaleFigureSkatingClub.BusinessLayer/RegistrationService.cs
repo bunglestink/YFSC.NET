@@ -4,7 +4,7 @@ using YaleFigureSkatingClub.Entities;
 
 namespace YaleFigureSkatingClub.BusinessLayer
 {
-	public class RegistrationService
+	public class RegistrationService : IRegistrationService
 	{
 		public RegistrationService ()
 		{

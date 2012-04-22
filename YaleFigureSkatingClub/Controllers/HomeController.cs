@@ -17,9 +17,9 @@ namespace Controllers
 	{
 		readonly ISession session;
 		
-		public HomeController()
+		public HomeController(ISession session)
 		{
-			session = NHSessionManager.CurrentSession;
+			this.session = session;
 		}
 		
 		

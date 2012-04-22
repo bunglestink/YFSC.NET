@@ -158,6 +158,10 @@ MODEL = (function () {
 	    this.Sessions = ko.observableArray([]);
 	    
 	    this.fullName = ko.computed(function () {
+	        if (!this.FirstName && !this.LastName) {
+	        	return '(no name entered)';
+	        }
+	        
 	        return (this.FirstName() || '') + ' ' + (this.LastName() || '');
 	    }, this);
 	}

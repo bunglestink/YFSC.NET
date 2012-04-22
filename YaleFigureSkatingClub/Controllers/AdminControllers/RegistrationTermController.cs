@@ -16,9 +16,9 @@ namespace YaleFigureSkatingClub
 	{
 		readonly ISession session;
 		
-		public RegistrationTermController()
+		public RegistrationTermController(ISession session)
 		{
-			this.session = NHSessionManager.CurrentSession;
+			this.session = session;
 		}
 		
 		public ActionResult Index()
@@ -42,15 +42,12 @@ namespace YaleFigureSkatingClub
 		
 		public ActionResult Edit(int id)
 		{
-			RegistrationTerm term = 
-				session
-					.Query<RegistrationTerm>()
-					.SingleOrDefault(a => a.ID == id);
+			RegistrationTerm term = session.Get<RegistrationTerm>(id);
 			
-			if (term == null)
+			if (term == null) {
 				return RedirectToAction("Index");
-			else
-				return View (term);
+			}
+			return View (term);
 		}
 		
 		
@@ -64,10 +61,7 @@ namespace YaleFigureSkatingClub
 		
 		public ActionResult DeleteConfirm(int id)
 		{
-			RegistrationTerm term = 
-				session
-					.Query<RegistrationTerm>()
-					.SingleOrDefault(a => a.ID == id);
+			RegistrationTerm term = session.Get<RegistrationTerm>(id);
 			
 			if (term == null) {
 				return RedirectToAction("Index");
@@ -82,10 +76,7 @@ namespace YaleFigureSkatingClub
 		
 		public ActionResult Delete(int id)
 		{
-			RegistrationTerm term = 
-				session
-					.Query<RegistrationTerm>()
-					.SingleOrDefault(a => a.ID == id);
+			RegistrationTerm term = session.Get<RegistrationTerm>(id);
 			
 			if (term.CalendarItems.Count > 0) {
 				// do not delete if has calendar items

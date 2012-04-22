@@ -17,9 +17,9 @@ namespace YaleFigureSkatingClub
 	{
 		readonly ISession session;
 		
-		public CalendarItemController() 
+		public CalendarItemController(ISession session) 
 		{
-			this.session = NHSessionManager.CurrentSession;
+			this.session = session;
 		}
 		
 		//TODO: check if this works... idea using inherited ViewModel
@@ -46,12 +46,12 @@ namespace YaleFigureSkatingClub
 		public ActionResult Edit(int id)
 		{
 			CalendarItem item = session.Get<CalendarItem>(id);
-			ViewCalendarItem viewItem = new ViewCalendarItem(item);
 			
 			if (item == null) {
 				return RedirectToAction("Index");
 			}
 			else {
+				ViewCalendarItem viewItem = new ViewCalendarItem(item);
 				return View (viewItem);
 			}
 		}

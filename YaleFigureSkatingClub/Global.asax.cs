@@ -5,12 +5,17 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using NHibernate;
+using Ninject;
 using YaleFigureSkatingClub.Infrastructure;
+using YaleFigureSkatingClub.BusinessLayer;
 
 namespace YaleFigureSkatingClub
 {
-	public class MvcApplication : System.Web.HttpApplication
+	public class MvcApplication : System.Web.HttpApplication, IContainerAccessor
 	{
+		static StandardKernel ninjectKernel;
+		public IKernel NinjectKernel { get { return ninjectKernel; } }
+		
 		public static void RegisterRoutes (RouteCollection routes)
 		{
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
@@ -27,6 +32,8 @@ namespace YaleFigureSkatingClub
 		{
 			RegisterRoutes(RouteTable.Routes);
 			ModelBinders.Binders.DefaultBinder = new JsonModelBinder();
+			InitContainer();
+			ControllerBuilder.Current.SetControllerFactory(typeof(NinjectControllerFactory));
 		}
 		
 		protected void Application_BeginRequest(object sender, EventArgs e)
@@ -47,6 +54,16 @@ namespace YaleFigureSkatingClub
 			var error = Server.GetLastError();
 			Console.WriteLine (error.Message);
 			Console.WriteLine (error.StackTrace);
+		}
+		
+		
+		private static void InitContainer()
+		{
+			if (ninjectKernel == null) {
+				ninjectKernel = new StandardKernel();
+			}
+			ninjectKernel.Bind<ISession>().ToMethod(x => NHSessionManager.CurrentSession);
+			ninjectKernel.Bind<IRegistrationService>().To<RegistrationService>();
 		}
 	}
 }

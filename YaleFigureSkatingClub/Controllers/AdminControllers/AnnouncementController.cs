@@ -16,9 +16,9 @@ namespace YaleFigureSkatingClub
 	{
 		readonly ISession session;
 		
-		public AnnouncementController() 
+		public AnnouncementController(ISession session) 
 		{
-			this.session = NHSessionManager.CurrentSession;
+			this.session = session;
 		}
 		
 		public ActionResult Index()

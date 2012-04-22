@@ -14,12 +14,12 @@ namespace YaleFigureSkatingClub.Controllers
     public class AnnualRegistrationServiceController : Controller
     {
 		readonly ISession session;
-		readonly RegistrationService registrationService;
+		readonly IRegistrationService registrationService;
 		
-		public AnnualRegistrationServiceController() 
+		public AnnualRegistrationServiceController(ISession session, IRegistrationService registrationService) 
 		{
-			session = NHSessionManager.CurrentSession;
-			registrationService = new RegistrationService();
+			this.session = session;
+			this.registrationService = registrationService;
 		}
 		
         public JsonResult New()
