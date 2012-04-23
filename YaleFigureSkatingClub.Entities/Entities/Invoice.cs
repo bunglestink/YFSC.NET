@@ -15,6 +15,8 @@ namespace YaleFigureSkatingClub.Entities
 		
 		public virtual decimal TotalCost { get { return InvoiceItems.Sum(i => i.TotalCost); } }
 		public virtual decimal AmountPaid { get { return InvoicePayments.Sum (p => p.Amount); } }
+		public virtual decimal OutstandingBalance { get { return TotalCost - AmountPaid; } }
+		public virtual bool PaidInFull { get { return AmountPaid >= TotalCost; } }
 		
 		public Invoice()
 		{

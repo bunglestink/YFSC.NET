@@ -269,6 +269,9 @@
     <Content Include="Scripts\knockout-2.0.0.js" />
     <Content Include="Scripts\Util\alert.js" />
     <Content Include="Scripts\Util\fix-json-date.js" />
+    <Content Include="Views\Membership\WebInvoice.aspx" />
+    <Content Include="Content\Site-print.css" />
+    <Content Include="Views\Membership\CsvInvoice.aspx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

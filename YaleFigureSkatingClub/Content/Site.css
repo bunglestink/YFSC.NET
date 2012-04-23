@@ -228,6 +228,7 @@ table td
   padding: 5px;   
   border: solid 1px #e8eef4;
 }
+table .currency {text-align: right;}
 
 table th
 {
@@ -379,9 +380,9 @@ div#title
     width: auto; 
 }
 
-#registration-skaters input, #registration-skaters label { width: 100px; }
+#registration-skaters input, #registration-skaters label, #registration-skaters select { width: 100px; }
 #registration-skaters label {margin-right: 5px; text-align:center;}
-#registration-skaters .registration-skaters-sex { width: 30px; }
+#registration-skaters .registration-skaters-sex { width: 40px; }
 #registration-skaters .registration-skaters-us-citizen { width: 50px; }
 
 #registration-sessions>ul, #registration-skaters ul {list-style: none; padding-left: 0px;  }
@@ -420,3 +421,8 @@ div#title
 	display: block;
 	margin: 25px 0 25px 0;
 }
+.invoice-header label { width: 200px; display: inline-block;}
+.invoice-header span { width: 100px; display: inline-block; text-align: right;}
+.invoice-header .not-paid-in-full { color: #f00; }
+.dialog {display:none;}
+.dialog label {width: 100px; display: inline-block;}

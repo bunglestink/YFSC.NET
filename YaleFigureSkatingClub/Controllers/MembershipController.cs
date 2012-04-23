@@ -21,9 +21,26 @@ namespace YaleFigureSkatingClub
 		
 		public ActionResult Index()
 		{
-			YaleFigureSkatingClub.Entities.User user = session.Get<YaleFigureSkatingClub.Entities.User>(User.Identity.Name);
+			var user = session.Get<YaleFigureSkatingClub.Entities.User>(User.Identity.Name);
 			return View (user);
 		}
+		
+		public ActionResult Invoice(int id, string format, string status)
+		{
+			var invoice = session.Get<YaleFigureSkatingClub.Entities.Invoice>(id);
+			if (invoice == null) {
+				return RedirectToAction("Index");
+			}
+			
+			if (status != null && status == "success") {
+				TempData["message"] = "Your registration has been successfully submited!  Please print this invoice and submit with payment.";
+			}
+			if (format != null && format == "csv") {
+				return View("CsvInvoice", invoice);
+			}
+			return View("WebInvoice", invoice);
+		}
+		
 		
 		public ActionResult Register()
 		{
