@@ -52,7 +52,7 @@
                     <li><%= Html.ActionLink("Coaches", "ClubCoaches", "Home", new { id=(int?)null}, null) %></li>
 					<li><%= Html.ActionLink("Membership", "Membership", "Home") %></li>
 					<li><%= Html.ActionLink("Brochure", "Brochure", "Home") %></li>
-					<li><%= Html.ActionLink("Bylaws", "ByLaws", "Home") %></li>
+					<li><%= Html.ActionLink("ByLaws", "ByLaws", "Home") %></li>
 					<li><%= Html.ActionLink("Contact", "ContactInformation", "Home") %></li>
                 </ul>
 
