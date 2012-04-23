@@ -38,7 +38,7 @@
 				    <text>Welcome <b><%= Context.User.Identity.Name %></b>!
 				    [ <%= Html.ActionLink("Member Area", "Index", "Membership") %> | <%= Html.ActionLink("Log Off", "LogOff", "Account") %> ]</text>
 				<% } else { %>
-				    [ <%= Html.ActionLink("Log On", "LogOn", "Account") %> ]
+				    [ <%= Html.ActionLink("Log On", "LogOn", "Account") %> ] | [ <%= Html.ActionLink("Create Account", "Create", "Account") %> ]
 				<% } %>
             </div>
 

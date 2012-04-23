@@ -74,6 +74,15 @@
     <Compile Include="Mappings\UserMapping.cs" />
     <Compile Include="Mappings\RoleMapping.cs" />
     <Compile Include="NHConfiguration.cs" />
+    <Compile Include="Entities\Invoice.cs" />
+    <Compile Include="Entities\InvoiceItem.cs" />
+    <Compile Include="Entities\InvoicePayment.cs" />
+    <Compile Include="Mappings\InvoiceMapping.cs" />
+    <Compile Include="Mappings\InvoicePaymentMapping.cs" />
+    <Compile Include="Mappings\InvoiceItemMapping.cs" />
+    <Compile Include="Mappings\AnnualRegistrationMapping.cs" />
+    <Compile Include="Mappings\AnnualRegistrationSkaterMapping.cs" />
+    <Compile Include="Mappings\SkatingSessionMapping.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

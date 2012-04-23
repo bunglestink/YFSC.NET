@@ -11,10 +11,12 @@ namespace YaleFigureSkatingClub.Entities
 		public virtual string Email { get; set; }
 		
 		public virtual IList<Role> Roles { get; set; }
+		public virtual IList<AnnualRegistration> Registrations { get; set; }
 		
 		public User ()
 		{
 			Roles = new List<Role>();
+			Registrations = new List<AnnualRegistration>();
 		}
 	}
 }

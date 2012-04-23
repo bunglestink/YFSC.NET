@@ -13,10 +13,15 @@ namespace YaleFigureSkatingClub.Entities
 			LazyLoad();
 			Id (x => x.Username).Column ("Username").Length(255);
 			Map (x => x.Password).Column("Password").Length (3000);
+			Map (x => x.Email).Column ("Email");
 			HasMany (x => x.Roles)
 				.KeyColumn("Username")
 				.Inverse()
 				.Cascade.All ();
+			HasMany (x => x.Registrations)
+				.KeyColumn ("Username")
+				.Inverse()
+				.Cascade.All();
 		}
 	}
 }
