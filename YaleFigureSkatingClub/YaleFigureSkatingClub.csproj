@@ -79,23 +79,23 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\ServiceControllers\AnnualRegistrationServiceController.cs" />
-    <Compile Include="Controllers\ServiceControllers\SkatingSessionServiceController.cs" />
     <Compile Include="Controllers\SkatingSessionController.cs" />
-    <Compile Include="Controllers\AdminControllers\AnnouncementController.cs" />
-    <Compile Include="Controllers\AdminControllers\CoachController.cs" />
-    <Compile Include="Controllers\AdminControllers\RegistrationTermController.cs" />
-    <Compile Include="Controllers\AdminControllers\CalendarItemController.cs" />
     <Compile Include="Infrastructure\YaleMembershipProvider.cs" />
     <Compile Include="Infrastructure\YaleRoleProvider.cs" />
-    <Compile Include="Controllers\InfrastructureControllers\AccountController.cs" />
-    <Compile Include="Controllers\MemberControllers\MembershipController.cs" />
-    <Compile Include="Controllers\InfrastructureControllers\ErrorsController.cs" />
     <Compile Include="Infrastructure\NHSessionManager.cs" />
     <Compile Include="Models\ViewCalendarItem.cs" />
     <Compile Include="Infrastructure\JsonModelBinder.cs" />
     <Compile Include="Infrastructure\NinjectControllerFactory.cs" />
     <Compile Include="Infrastructure\IContainerAccessor.cs" />
+    <Compile Include="Controllers\AnnouncementController.cs" />
+    <Compile Include="Controllers\CalendarItemController.cs" />
+    <Compile Include="Controllers\CoachController.cs" />
+    <Compile Include="Controllers\RegistrationTermController.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ErrorsController.cs" />
+    <Compile Include="Controllers\MembershipController.cs" />
+    <Compile Include="Controllers\AnnualRegistrationServiceController.cs" />
+    <Compile Include="Controllers\SkatingSessionServiceController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />
