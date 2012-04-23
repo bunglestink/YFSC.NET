@@ -16,6 +16,8 @@ MODEL = (function () {
 		                // bind selected session
 		                this.selectedSession = ko.observable(this.CurrentSessions[0]);
 		                this.TotalCost = ko.observable(0);
+		                this.SexOptions = ['F', 'M'];
+		                this.SkatingLevels = ['Regular', 'Basic'];
 		                
 		                // build view methods
 		                this.addSkater = function () {
@@ -130,9 +132,17 @@ MODEL = (function () {
             	});
             }
             
+            var dob = new Date(skater.BirthDate());
+			var dobString = dob.getFullYear() + '-' + (dob.getMonth() + 1) + '-' + dob.getDate();
+            
             result.Skaters.push({
             	FirstName: skater.FirstName(),
             	LastName: skater.LastName(),
+            	Sex: skater.Sex(),
+            	USCitizen: skater.USCitizen(),
+            	BirthDate: dobString,
+            	NewRegistrant: skater.NewRegistrant(),
+            	Level: skater.Level(),
             	Sessions: sessions
             });
         }

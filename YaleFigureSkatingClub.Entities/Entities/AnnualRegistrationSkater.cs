@@ -33,7 +33,8 @@ namespace YaleFigureSkatingClub.Entities
 
         [Required]
         public virtual string Level { get; set; }
-
+		
+		public virtual AnnualRegistration Registration { get; set; }
         public virtual IList<SkatingSession> Sessions { get; set; }
 		
 		

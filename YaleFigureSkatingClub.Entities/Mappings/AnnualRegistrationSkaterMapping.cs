@@ -21,6 +21,7 @@ namespace YaleFigureSkatingClub.Entities
 			Map (x => x.NewRegistrant);
 			Map (x => x.Level);
 			
+			References(x => x.Registration).Column ("RegistrationID");
 			HasManyToMany<SkatingSession>(x => x.Sessions)
 				.Table ("SkatingSessionSkaters")
 				.ParentKeyColumn("RegistrationSkaterID")

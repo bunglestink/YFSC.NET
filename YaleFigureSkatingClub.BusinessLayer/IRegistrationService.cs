@@ -5,7 +5,8 @@ namespace YaleFigureSkatingClub.BusinessLayer
 {
 	public interface IRegistrationService
 	{
-		void SubmitRegistration(AnnualRegistration annualRegistration);
+		AnnualRegistration CreateNewAnnualRegistration();
+		void SubmitRegistration(AnnualRegistration annualRegistration, User user);
 		decimal GetRegistrationCost(AnnualRegistration annualRegistration);
 	}
 }

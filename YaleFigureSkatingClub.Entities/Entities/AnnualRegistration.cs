@@ -48,6 +48,7 @@ namespace YaleFigureSkatingClub.Entities
 
 		
 		public virtual RegistrationTerm RegistrationTerm { get; set; }
+		public virtual User User { get; set; }
 		public virtual Invoice Invoice { get; set; }
         public virtual IList<AnnualRegistrationSkater> Skaters { get; set; }
 

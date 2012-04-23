@@ -38,8 +38,9 @@ namespace YaleFigureSkatingClub.Controllers
 				return Json (errors);
 			}
 			
-			registrationService.SubmitRegistration(registration);
-			return Json(true);
+			var user = session.Get<YaleFigureSkatingClub.Entities.User>(User.Identity.Name);
+			registrationService.SubmitRegistration(registration, user);
+			return Json(registration.Invoice.ID);
         }
 		
 		

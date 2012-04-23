@@ -30,6 +30,7 @@ namespace YaleFigureSkatingClub.Entities
 			Map (x => x.Year);
 			
 			References(x => x.RegistrationTerm).Column("RegistrationTermID");
+			References(x => x.User).Column("Username");
 			HasOne(x => x.Invoice)
 				.PropertyRef(x => x.Registration)
 				.Cascade.All();

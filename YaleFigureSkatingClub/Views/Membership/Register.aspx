@@ -115,9 +115,14 @@
 									type: 'POST',
 									contentType: 'application/json',
 									success: function (result) {
-										if (result === true) {
-											UTIL.alert('success!');
-											return;
+										if (result) {
+											var id = parseInt(result, 10);
+											if (id) {
+												// prevent leave page warning, then redirect
+												window.onbeforeunload = function () {};
+												window.location = settings['submit-success-url'] + '/' + id.toString();
+												return;
+											}
 										}
 										
 										// if not true, model errors: 
@@ -174,7 +179,8 @@
 		data-current-sessions-url="<%= Url.Action("Current", "SkatingSessionService") %>"
 		data-registration-base-url="<%= Url.Action("New", "AnnualRegistrationService") %>"
 		data-create-registration-url="<%= Url.Action("Create", "AnnualRegistrationService") %>"
-		data-get-registration-cost-url="<%= Url.Action("GetCost", "AnnualRegistrationService") %>">
+		data-get-registration-cost-url="<%= Url.Action("GetCost", "AnnualRegistrationService") %>"
+		data-submit-success-url="<%= Url.Action("Invoice", "Membership") %>">
 	    <div id="registration-navigation">
 	        <ul>
 	            <li><a href="#family">Family</a> </li>
@@ -302,11 +308,11 @@
 	                        <input data-bind="value: FirstName" />
 	                        <input data-bind="value: MiddleName" />
 	                        <input data-bind="value: LastName" />
-	                        <input data-bind="value: Sex" class="registration-skaters-sex" />
+	                        <select data-bind="value: Sex, options: $parent.SexOptions" class="registration-skaters-sex"></select>
 	                        <input data-bind="checked: USCitizen" type="checkbox" class="registration-skaters-us-citizen" />
 	                        <input data-bind="value: BirthDate" class="datefield" />
 	                        <input data-bind="checked: NewRegistrant" type="checkbox" />
-	                        <input data-bind="value: Level" />
+	                        <select data-bind="value: Level, options: $parent.SkatingLevels"></select>
 	                        <button data-bind="click: remove, button: true">Remove</button>
 	                    </li>
 	                </script>

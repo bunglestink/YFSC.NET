@@ -30,7 +30,7 @@
 							<% foreach (var registration in Model.Registrations) { %>
 								<tr>
 									<td><%= registration.RegistrationTerm.TermName %></td>
-									<td><%= registration.Invoice.InvoiceDate.ToShortDateString() %></td>
+									<td><%= registration.Invoice.InvoiceDate == null ? "" : registration.Invoice.InvoiceDate.ToShortDateString() %></td>
 									<td><%= registration.Skaters.Count %></td>
 									<td class="currency">$<%= registration.Invoice.TotalCost %></td>
 									<td class="currency">$<%= registration.Invoice.AmountPaid %></td>
