@@ -12,16 +12,25 @@ using Microsoft.Web.Mvc.DataAnnotations;
 namespace YaleFigureSkatingClub.Infrastructure
 {
 	// Json Model binder - idea from http://stackoverflow.com/questions/4164114/posting-json-data-to-asp-net-mvc
-	public class JsonModelBinder : DataAnnotationsModelBinder
+	public class JsonModelBinder : DefaultModelBinder
 	{
 	
 		public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext) 
 		{
-			if (IsJsonRequest(controllerContext)) {
-                return BindJsonModel(controllerContext, bindingContext);
-			}
+			object model;
 			
-			return base.BindModel(controllerContext, bindingContext);
+			if (IsJsonRequest(controllerContext)) {
+                model = BindJsonModel(controllerContext, bindingContext);
+			}
+			else {
+				model = base.BindModel(controllerContext, bindingContext);
+			}	
+			
+			if (model != null) {
+				ValidateModel (model, bindingContext);
+			}
+
+			return model;
 		}
 		
 		object BindJsonModel(ControllerContext controllerContext, ModelBindingContext bindingContext) 
@@ -30,8 +39,6 @@ namespace YaleFigureSkatingClub.Infrastructure
 			var jsonStringData = new StreamReader(request.InputStream).ReadToEnd();
 			var model = new JavaScriptSerializer().Deserialize(jsonStringData, bindingContext.ModelType);
 
-            ValidateModel(model, bindingContext);
-
 			return model;
 		}
 		
@@ -39,7 +46,7 @@ namespace YaleFigureSkatingClub.Infrastructure
 		{
 			validatedObjects = validatedObjects ?? new List<int>();
 			
-			var typeDescriptor = GetTypeDescriptor(model, model.GetType ());
+			var typeDescriptor = GetTypeDescriptor(model, model.GetType());
 			
 			// validate the model
 			foreach (ValidationAttribute attribute in typeDescriptor.GetAttributes().OfType<ValidationAttribute>()) {
@@ -52,20 +59,18 @@ namespace YaleFigureSkatingClub.Infrastructure
 			// validate properties, recurse if necessary
 			foreach (PropertyDescriptor property in typeDescriptor.GetProperties()) {
 				var propInstance = property.GetValue (model);
-
-                if (propInstance == null) {
-                    foreach (ValidationAttribute attribute in property.Attributes.OfType<ValidationAttribute>()) {
-                        if (!attribute.IsValid(propInstance)) {
-                            bindingContext.ModelState.AddModelError(property.Name, attribute.FormatErrorMessage(property.Name));
-                            if (propInstance != null) {
-                                validatedObjects.Add(propInstance.GetHashCode());
-                            }
-                        }
-                        else if (propInstance != null) {
-                            ValidateModel(propInstance, bindingContext, validatedObjects);
+				
+                foreach (ValidationAttribute attribute in property.Attributes.OfType<ValidationAttribute>()) {
+                    if (!attribute.IsValid(propInstance)) {
+                        bindingContext.ModelState.AddModelError(property.Name, attribute.FormatErrorMessage(property.Name));
+                        if (propInstance != null) {
+                            validatedObjects.Add(propInstance.GetHashCode());
                         }
                     }
-                } 
+                    else if (propInstance != null) {
+                        ValidateModel(propInstance, bindingContext, validatedObjects);
+                    }
+                }
 			}
 		}
 			 

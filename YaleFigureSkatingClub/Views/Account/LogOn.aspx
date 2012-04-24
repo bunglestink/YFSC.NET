@@ -4,7 +4,11 @@
 	<div class="edit-area">
 		<% Html.BeginForm("LogOn", "Account"); %>
 		<%= Html.Hidden("returnUrl", Request["ReturnUrl"]) %>
+		<%= Html.Hidden("Email", "x") %>
 		<fieldset>
+			<div>
+				<%= Html.ValidationSummary() %>
+			</div>
 			<div>
 				<label>Username</label>
 				<%= Html.TextBox("Username", Model.Username) %>

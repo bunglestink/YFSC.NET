@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
+using NHibernate.Linq;
 using YaleFigureSkatingClub.Entities;
 
 namespace YaleFigureSkatingClub.BusinessLayer
@@ -27,6 +28,8 @@ namespace YaleFigureSkatingClub.BusinessLayer
 		public void SubmitRegistration (AnnualRegistration registration, User user) 
 		{
 			registration.User = user;
+			// TODO: fix reg term
+			registration.RegistrationTerm = session.Query<RegistrationTerm>().OrderBy(x => x.ID).First();
 			
 			foreach (var skater in registration.Skaters) {
 				var sessions = skater.Sessions;
@@ -58,6 +61,7 @@ namespace YaleFigureSkatingClub.BusinessLayer
 		void GenerateInvoice(AnnualRegistration registration)
 		{
 			var invoice = new Invoice();
+			invoice.InvoiceDate = DateTime.Today;
 			invoice.Registration = registration;
 			registration.Invoice = invoice;
 			var items = invoice.InvoiceItems as List<InvoiceItem>;
