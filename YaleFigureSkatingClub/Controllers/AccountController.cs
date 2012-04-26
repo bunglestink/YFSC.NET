@@ -7,6 +7,7 @@ using System.Web.Mvc.Ajax;
 using System.Web.Security;
 using System.Security.Principal;
 using YaleFigureSkatingClub.Entities;
+using YaleFigureSkatingClub.Infrastructure.Logging;
 using NHibernate;
 using NHibernate.Linq;
 
@@ -15,10 +16,12 @@ namespace YaleFigureSkatingClub
 	public class AccountController : Controller
 	{	
 		readonly ISession session;
+		readonly ILog log;
 		
-		public AccountController(ISession session)
+		public AccountController(ISession session, ILog log)
 		{
 			this.session = session;
+			this.log = log;
 		}
 		
 		
@@ -39,6 +42,7 @@ namespace YaleFigureSkatingClub
                 
 				if (Membership.ValidateUser(user.Username, user.Password)) {
 				
+					log.InfoFormat ("User '{0}' logged in successfully.", user.Username);
 					FormsAuthentication.SetAuthCookie(user.Username, false);	
 					
                     if (String.IsNullOrEmpty(returnUrl)) {
@@ -49,6 +53,7 @@ namespace YaleFigureSkatingClub
                     }
                 }
                 else {
+					log.InfoFormat ("User '{0}' unsuccessful login attempt.", user.Username);
                     ModelState.AddModelError("", "The user name or password provided is incorrect.");
                 }
             }

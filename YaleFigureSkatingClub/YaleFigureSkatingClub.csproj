@@ -20,6 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <FilesToIncludeForPublish>AllFilesInProjectFolder</FilesToIncludeForPublish>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -73,7 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\files\attach\" />
-    <Folder Include="Views\Invoice\" />
+    <Folder Include="Infrastructure\Logging\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
@@ -98,6 +99,8 @@
     <Compile Include="Controllers\AnnualRegistrationServiceController.cs" />
     <Compile Include="Controllers\SkatingSessionServiceController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
+    <Compile Include="Infrastructure\Logging\SimpleLog.cs" />
+    <Compile Include="Infrastructure\Logging\ILog.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />

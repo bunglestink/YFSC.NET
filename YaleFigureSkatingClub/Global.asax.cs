@@ -7,6 +7,7 @@ using System.Web.Routing;
 using NHibernate;
 using Ninject;
 using YaleFigureSkatingClub.Infrastructure;
+using YaleFigureSkatingClub.Infrastructure.Logging;
 using YaleFigureSkatingClub.BusinessLayer;
 
 namespace YaleFigureSkatingClub
@@ -19,6 +20,7 @@ namespace YaleFigureSkatingClub
 		public static void RegisterRoutes (RouteCollection routes)
 		{
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+			routes.IgnoreRoute("favicon.ico");
 
 			routes.MapRoute(
                 "Default",
@@ -63,6 +65,7 @@ namespace YaleFigureSkatingClub
 				ninjectKernel = new StandardKernel();
 			}
 			ninjectKernel.Bind<ISession>().ToMethod(x => NHSessionManager.CurrentSession);
+			ninjectKernel.Bind<ILog>().To<SimpleLog>();
 			ninjectKernel.Bind<IRegistrationService>().To<RegistrationService>();
 		}
 	}
