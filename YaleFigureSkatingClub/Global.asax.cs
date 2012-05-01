@@ -9,6 +9,7 @@ using Ninject;
 using YaleFigureSkatingClub.Infrastructure;
 using YaleFigureSkatingClub.Infrastructure.Logging;
 using YaleFigureSkatingClub.BusinessLayer;
+using YaleFigureSkatingClub.Controllers;
 
 namespace YaleFigureSkatingClub
 {
@@ -54,8 +55,9 @@ namespace YaleFigureSkatingClub
 		protected void Application_Error(object sender, EventArgs e)
 		{
 			var error = Server.GetLastError();
-			Console.WriteLine (error.Message);
-			Console.WriteLine (error.StackTrace);
+			var log = ninjectKernel.Get<ILog>();
+			log.Error(error.Message);
+			log.Error(error.StackTrace);
 		}
 		
 		
@@ -64,6 +66,7 @@ namespace YaleFigureSkatingClub
 			if (ninjectKernel == null) {
 				ninjectKernel = new StandardKernel();
 			}
+			
 			ninjectKernel.Bind<ISession>().ToMethod(x => NHSessionManager.CurrentSession);
 			ninjectKernel.Bind<ILog>().To<SimpleLog>();
 			ninjectKernel.Bind<IRegistrationService>().To<RegistrationService>();

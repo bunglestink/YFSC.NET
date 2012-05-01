@@ -20,8 +20,6 @@ namespace YaleFigureSkatingClub.Entities
         public virtual decimal TotalCost { get; set; }
         public virtual string Description { get; set; }
 		
-		public virtual RegistrationTerm RegistrationTerm { get; private set; }
-		
 		public SkatingSession()
 		{
 		}

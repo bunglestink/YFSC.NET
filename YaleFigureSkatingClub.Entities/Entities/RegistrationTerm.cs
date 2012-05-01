@@ -9,6 +9,7 @@ namespace YaleFigureSkatingClub.Entities
 		public virtual string TermName { get; set; }
 		public virtual DateTime StartDate { get; set; }
 		public virtual DateTime EndDate { get; set; }
+		public virtual bool Current { get; set; }
 		
 		public virtual IList<AnnualRegistration> AnnualRegistrations { get; set; }
 		public virtual IList<SkatingSession> SkatingSessions { get; set; }

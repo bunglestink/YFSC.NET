@@ -13,8 +13,12 @@ namespace YaleFigureSkatingClub.Entities
 			Map (x => x.TermName).Column("TermName").Length(255);
 			Map (x => x.StartDate).Column("StartDate");
 			Map (x => x.EndDate).Column("EndDate");
-			//HasMany(x => x.SkatingSessions).KeyColumn("RegistrationTermID");
+			Map (x => x.Current).Column("Current");
 			//HasMany (x => x.AnnualRegistrations).KeyColumn("RegistrationTermID");
+			HasMany(x => x.SkatingSessions)
+				.KeyColumn("RegistrationTermID")
+				.Inverse()
+				.Cascade.All();
 			HasMany (x => x.CalendarItems)
 				.KeyColumn("RegistrationTermID")
 				.Inverse()

@@ -20,8 +20,6 @@ namespace YaleFigureSkatingClub.Entities
 			Map (x => x.EndTime);
 			Map (x => x.TotalCost);
 			Map (x => x.Description);
-			
-			References(x => x.RegistrationTerm).Column ("RegistrationTermID");
 		}
 	}
 }

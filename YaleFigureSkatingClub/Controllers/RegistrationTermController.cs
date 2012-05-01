@@ -90,6 +90,23 @@ namespace YaleFigureSkatingClub
 				
 			return RedirectToAction("Index");
 		}
+		
+		
+		public ActionResult SetCurrent(int id)
+		{
+			var term = session.Get<RegistrationTerm>(id);
+			if (term == null) {
+				return Json (false);
+			}
+			
+			var terms = session.Query<RegistrationTerm>();
+			foreach (var t in terms) {
+				t.Current = false;
+			}		
+			term.Current = true;
+			
+			return Json (true);
+		}
 	}
 }
 

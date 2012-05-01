@@ -28,8 +28,9 @@ namespace YaleFigureSkatingClub.BusinessLayer
 		public void SubmitRegistration (AnnualRegistration registration, User user) 
 		{
 			registration.User = user;
-			// TODO: fix reg term
-			registration.RegistrationTerm = session.Query<RegistrationTerm>().OrderBy(x => x.ID).First();
+			// get current term
+			registration.RegistrationTerm = session.Query<RegistrationTerm>()
+					.Single(t => t.Current);
 			
 			foreach (var skater in registration.Skaters) {
 				var sessions = skater.Sessions;
