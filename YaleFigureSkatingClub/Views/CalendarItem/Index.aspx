@@ -1,6 +1,7 @@
 <%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage<YaleFigureSkatingClub.Entities.RegistrationTerm>" MasterPageFile="~/Views/Layout.master"   %>
 <asp:Content ContentPlaceHolderID="MainContent" runat="server">	
 	<h2><%= Model.TermName %> Calendar Items</h2>
+	<h5><%= Html.ActionLink("Back to registration terms", "Index", "RegistrationTerm") %></h5>
 	<h3><%= Html.ActionLink("Create New Calendar Item", "Create", "CalendarItem", new {id = Model.ID}, null) %></h3>
 	<table>
 		<tr>

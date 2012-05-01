@@ -17,7 +17,6 @@ namespace YaleFigureSkatingClub.Entities
 			//HasMany (x => x.AnnualRegistrations).KeyColumn("RegistrationTermID");
 			HasMany(x => x.SkatingSessions)
 				.KeyColumn("RegistrationTermID")
-				.Inverse()
 				.Cascade.All();
 			HasMany (x => x.CalendarItems)
 				.KeyColumn("RegistrationTermID")

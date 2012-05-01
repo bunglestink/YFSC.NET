@@ -54,6 +54,7 @@
 			<th>StartDate</th>
 			<th>EndDate</th>
 			<th>Calendar Items</th>
+			<th>Skating Sessions</th>
 			<th>Edit</th>
 			<th>Delete</th>
 			<th>Current</th>
@@ -66,6 +67,9 @@
 				<td><%= term.EndDate.ToShortDateString() %></td>
 				<td>
 					<%= term.CalendarItems.Count %> - <%= Html.ActionLink("View", "Index", "CalendarItem", new { id = term.ID }, null) %>
+				</td>
+				<td>
+					<%= term.SkatingSessions.Count %> - <%= Html.ActionLink("View", "Index", "SkatingSession", new { id = term.ID }, null) %>
 				</td>
 				<td><%= Html.ActionLink("Edit", "Edit", "RegistrationTerm", new { id = term.ID }, null) %></td>
 				<td><%= Html.ActionLink("Delete", "DeleteConfirm", "RegistrationTerm", new { id = term.ID }, null) %></td>

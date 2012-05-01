@@ -13,6 +13,7 @@ using NHibernate.Linq;
 namespace Controllers
 {
 	[HandleError]
+	[Authorize(Roles="Admin")]
 	public class InvoiceController : Controller
 	{
 		readonly ISession session;
@@ -41,7 +42,7 @@ namespace Controllers
 			return View (invoice);
 		}
 		
-		
+
 		public JsonResult AddPayment(InvoicePayment invoicePayment)
 		{
 			var invoiceById = invoicePayment.Invoice;
