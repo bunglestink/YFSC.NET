@@ -10,6 +10,7 @@ using YaleFigureSkatingClub.Infrastructure;
 using YaleFigureSkatingClub.Infrastructure.Logging;
 using YaleFigureSkatingClub.BusinessLayer;
 using YaleFigureSkatingClub.Controllers;
+using System.Configuration;
 
 namespace YaleFigureSkatingClub
 {
@@ -71,7 +72,7 @@ namespace YaleFigureSkatingClub
 			ninjectKernel.Bind<ILog>().To<SimpleLog>();
 			ninjectKernel.Bind<IRegistrationService>().To<RegistrationService>();
 			ninjectKernel.Bind<IBackupService>().To<BackupService>()
-				.WithConstructorArgument("backupScriptPath", @"C:\Users\Kirk\Documents\Projects\YaleFigureSkatingClub\YaleFigureSkatingClub.BusinessLayer\pgdumpBackup.bat")
+				.WithConstructorArgument("backupScriptPath", ConfigurationManager.AppSettings["pgdumpScript"])
 				.WithConstructorArgument("scriptIgnoreLines", 4);
 		}
 	}
