@@ -1,4 +1,33 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Views/Layout.master" Inherits="System.Web.Mvc.ViewPage<YaleFigureSkatingClub.Entities.User>" %>
+<asp:Content ContentPlaceHolderID="AdditionalScripts" runat="server">
+	<script type="text/javascript">
+	$(function () {
+		$('#backup-action').click(function () {
+			
+			$('#backup-confirm').dialog({
+				autoOpen: true,
+				modal: true,
+				resizable: false,
+				title: 'Confirmation',
+				buttons: {
+					'Yes, perform backup now': function () {
+						window.location = $('#backup-action').attr('href');
+						$(this).dialog('close');
+					},
+					'Cancel': function() {
+						$(this).dialog('close');
+					}
+				},
+				close: function () {
+					$(this).dialog('destroy');
+				}
+			});
+			
+			return false;
+		});
+	});
+	</script>
+</asp:Content>	
 <asp:Content ContentPlaceHolderID="MainContent" runat="server">
 	<h2>Membership</h2>
 	<div class="formatted-content">
@@ -54,6 +83,13 @@
 						<li><%= Html.ActionLink("Registration Terms", "Index", "RegistrationTerm") %></li>
 					</ul>
 				</fieldset>
+				<fieldset>
+					<legend>Maintenance</legend>
+					<ul>
+						<li><%= Html.ActionLink("Backup System", "Backup", "AdminServices", null, new { id="backup-action" }) %></li>
+					</ul>
+				</fieldset>
+				<div id="backup-confirm" class="dialog">This action will create a backup of the entire system.  This can be used for archival purposes, and can be restored by an admin.  Are you sure you wish to backup the system?</div>
 			<% } %>
 		</div>
 	</div>

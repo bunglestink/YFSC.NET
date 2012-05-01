@@ -103,6 +103,7 @@
     <Compile Include="Infrastructure\Logging\SimpleLog.cs" />
     <Compile Include="Infrastructure\Logging\ILog.cs" />
     <Compile Include="Models\ViewSkatingSession.cs" />
+    <Compile Include="Controllers\AdminServicesController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />

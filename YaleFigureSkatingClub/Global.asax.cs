@@ -70,6 +70,9 @@ namespace YaleFigureSkatingClub
 			ninjectKernel.Bind<ISession>().ToMethod(x => NHSessionManager.CurrentSession);
 			ninjectKernel.Bind<ILog>().To<SimpleLog>();
 			ninjectKernel.Bind<IRegistrationService>().To<RegistrationService>();
+			ninjectKernel.Bind<IBackupService>().To<BackupService>()
+				.WithConstructorArgument("backupScriptPath", @"C:\Users\Kirk\Documents\Projects\YaleFigureSkatingClub\YaleFigureSkatingClub.BusinessLayer\pgdumpBackup.bat")
+				.WithConstructorArgument("scriptIgnoreLines", 4);
 		}
 	}
 }

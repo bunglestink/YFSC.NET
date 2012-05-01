@@ -54,6 +54,8 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="RegistrationService.cs" />
     <Compile Include="IRegistrationService.cs" />
+    <Compile Include="IBackupService.cs" />
+    <Compile Include="BackupService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -61,5 +63,8 @@
       <Project>{CBCA1B0E-83EA-4CA3-A69B-18959B15F2A7}</Project>
       <Name>YaleFigureSkatingClub.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="pgdumpBackup.bat" />
   </ItemGroup>
 </Project>
